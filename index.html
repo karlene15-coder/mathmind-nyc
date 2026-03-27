@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathMind NYC — Learn, Practice & Grow</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sun: #FFD93D;
+  --coral: #FF6B6B;
+  --mint: #4ECDC4;
+  --navy: #1A1A2E;
+  --navy2: #16213E;
+  --navy3: #0F3460;
+  --card: #1e2a45;
+  --card2: #243050;
+  --border: #2d3f63;
+  --text: #EEF2FF;
+  --muted: #8899bb;
+  --green: #6EE7B7;
+  --orange: #FDB97D;
+  --purple: #C084FC;
+  --red: #FF6B6B;
+  --warn: #FDB97D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--navy);color:var(--text);font-family:'Nunito',sans-serif;font-size:15px}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── LAYOUT ── */
+#app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 12px;transition:transform .3s}
+.content{flex:1;overflow-y:auto;background:var(--navy)}
+
+/* ── SIDEBAR ── */
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--sun);padding:4px 8px 20px;letter-spacing:-.5px;line-height:1.1}
+.logo span{color:var(--mint);font-style:italic}
+.nav-section{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:8px 8px 4px;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:10px;cursor:pointer;font-weight:700;font-size:14px;color:var(--muted);transition:all .15s;margin-bottom:2px;border:1px solid transparent}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.active{background:var(--navy3);color:var(--sun);border-color:rgba(255,217,61,.2)}
+.nav-item .icon{font-size:18px;width:22px;text-align:center}
+.nav-spacer{flex:1}
+.user-chip{background:var(--card);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;border:1px solid var(--border)}
+.user-chip .avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#000;flex-shrink:0}
+.user-chip .info{min-width:0}
+.user-chip .name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-chip .role{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.badge-count{background:var(--coral);color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;margin-left:auto}
+
+/* ── VIEWS ── */
+.view{display:none;padding:32px 36px;min-height:100%}
+.view.active{display:block}
+
+/* ── HEADERS ── */
+.page-header{margin-bottom:28px}
+.page-title{font-family:'Fraunces',serif;font-size:32px;font-weight:900;line-height:1.1;margin-bottom:6px}
+.page-title em{font-style:italic;color:var(--sun)}
+.page-sub{color:var(--muted);font-size:14px}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.card-sm{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card-title{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;font-weight:700}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ── STAT CARDS ── */
+.stat{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:600;line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+
+/* ── BUTTONS ── */
+.btn{padding:11px 22px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+.btn-sun{background:var(--sun);color:#1a1a2e}
+.btn-sun:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-mint{background:var(--mint);color:#1a1a2e}
+.btn-mint:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--sun);color:var(--sun)}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+
+/* ── INPUTS ── */
+input,select,textarea{background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;width:100%;outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--mint)}
+select option{background:var(--navy2)}
+textarea{resize:vertical;min-height:100px;line-height:1.6}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:5px;letter-spacing:.3px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── PROGRESS BAR ── */
+.prog-track{background:var(--navy2);border-radius:99px;height:8px;overflow:hidden;margin:6px 0}
+.prog-fill{height:100%;border-radius:99px;transition:width .6s ease}
+
+/* ── QUIZ / ASSESSMENT ── */
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px}
+.q-num{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.q-text{font-size:18px;font-weight:700;line-height:1.5;margin-bottom:20px}
+.q-text .math{font-family:'JetBrains Mono',monospace;background:var(--navy2);padding:2px 8px;border-radius:5px;font-size:16px}
+.options{display:grid;gap:10px}
+.opt{padding:14px 18px;border-radius:11px;border:2px solid var(--border);background:var(--card2);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;display:flex;align-items:center;gap:12px}
+.opt:hover{border-color:var(--mint);background:rgba(78,205,196,.06)}
+.opt.selected{border-color:var(--mint);background:rgba(78,205,196,.12);color:var(--mint)}
+.opt.correct{border-color:var(--green);background:rgba(110,231,183,.12);color:var(--green)}
+.opt.wrong{border-color:var(--red);background:rgba(255,107,107,.1);color:var(--red)}
+.opt-letter{width:28px;height:28px;border-radius:7px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0}
+.open-answer{margin-top:10px}
+.open-answer input{font-size:16px;padding:14px 16px}
+
+/* ── FEEDBACK ── */
+.feedback-box{border-radius:12px;padding:18px;margin-top:14px;display:none;line-height:1.6;font-size:14px}
+.feedback-box.correct{background:rgba(110,231,183,.08);border:1px solid rgba(110,231,183,.3);color:var(--green)}
+.feedback-box.wrong{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.25);color:#fca5a5}
+.feedback-box.visible{display:block}
+.feedback-box strong{font-weight:800}
+.tutor-response{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:12px;display:none;font-size:14px;line-height:1.7}
+.tutor-response.visible{display:block}
+.tutor-label{font-size:11px;color:var(--purple);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+/* ── LESSON ── */
+.lesson-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;cursor:pointer;transition:all .2s}
+.lesson-card:hover{border-color:var(--sun);transform:translateY(-2px)}
+.lesson-tag{display:inline-block;font-size:10px;padding:3px 9px;border-radius:5px;font-weight:700;letter-spacing:.5px;margin-bottom:10px}
+.tag-new{background:rgba(255,217,61,.15);color:var(--sun)}
+.tag-review{background:rgba(78,205,196,.15);color:var(--mint)}
+.tag-locked{background:var(--card2);color:var(--muted)}
+.lesson-title{font-size:16px;font-weight:800;margin-bottom:6px}
+.lesson-meta{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px}
+.lesson-icon{font-size:28px;margin-bottom:10px}
+
+/* ── GRADER ── */
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--mint);background:rgba(78,205,196,.04)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.preview-img{width:100%;max-height:180px;object-fit:contain;border-radius:8px;margin-top:10px;border:1px solid var(--border)}
+
+/* ── TAGS ── */
+.std-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 9px;border-radius:5px;background:rgba(56,189,248,.1);color:#7dd3fc;border:1px solid rgba(56,189,248,.2);margin:2px}
+.std-tag.met{background:rgba(110,231,183,.1);color:var(--green);border-color:rgba(110,231,183,.2)}
+.std-tag.notmet{background:rgba(255,107,107,.08);color:var(--red);border-color:rgba(255,107,107,.2)}
+
+/* ── PROGRESS VIEW ── */
+.skill-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.skill-row:last-child{border-bottom:none}
+.skill-name{flex:1;font-weight:700;font-size:14px}
+.skill-pct{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);width:42px;text-align:right}
+.skill-bar{flex:2}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy3);border:1px solid var(--mint);color:var(--mint);border-radius:10px;padding:12px 20px;font-weight:700;font-size:13px;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── LOADING ── */
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--mint);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+.loading-state p{margin-top:12px}
+
+/* ── SCORE SCREEN ── */
+.score-screen{text-align:center;padding:40px 20px}
+.big-score{font-family:'Fraunces',serif;font-size:80px;font-weight:900;line-height:1}
+.score-ring{width:140px;height:140px;border-radius:50%;border:6px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative}
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:var(--navy);z-index:100;display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:420px;text-align:center}
+.login-logo{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--sun);margin-bottom:4px}
+.login-logo span{color:var(--mint);font-style:italic}
+.login-sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+.role-pills{display:flex;gap:8px;margin-bottom:20px;justify-content:center}
+.role-pill{padding:8px 18px;border-radius:8px;border:2px solid var(--border);font-weight:800;font-size:13px;cursor:pointer;transition:all .15s;color:var(--muted)}
+.role-pill:hover,.role-pill.active{border-color:var(--sun);color:var(--sun);background:rgba(255,217,61,.08)}
+
+/* ── CHAT TUTOR ── */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 120px)}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:80%;padding:14px 16px;border-radius:14px;font-size:14px;line-height:1.6}
+.msg.ai{background:var(--card2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--navy3);border:1px solid rgba(78,205,196,.2);align-self:flex-end;border-bottom-right-radius:4px;color:var(--mint)}
+.msg .ai-label{font-size:10px;color:var(--purple);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.chat-input-row{display:flex;gap:10px;padding:16px;border-top:1px solid var(--border)}
+.chat-input-row input{flex:1}
+
+/* ── HAMBURGER ── */
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:60;background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:18px;line-height:1}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hamburger{display:block}
+  .sidebar-overlay.show{display:block}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .view{padding:20px 16px}
+  .g3,.g4{grid-template-columns:1fr 1fr}
+  .g2{grid-template-columns:1fr}
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.view.active{animation:fadeUp .25s ease}
+.streaks{display:flex;gap:4px;margin-top:8px}
+.streak-day{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.streak-done{background:rgba(255,217,61,.2);color:var(--sun);border:1px solid rgba(255,217,61,.3)}
+.streak-miss{background:var(--card2);color:var(--border);border:1px solid var(--border)}
+.streak-today{background:var(--sun);color:#1a1a2e;border:1px solid var(--sun)}
+
+.tab-row{display:flex;gap:6px;margin-bottom:20px}
+.tab{padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .15s}
+.tab.active{background:var(--card2);color:var(--sun);border-color:rgba(255,217,61,.2)}
+.tab:hover:not(.active){color:var(--text)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+.rtag{display:inline-block;padding:5px 12px;border-radius:7px;border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;margin:3px;transition:all .15s}
+.rtag.sel{border-color:var(--mint);color:var(--mint);background:rgba(78,205,196,.08)}
+.rtag:hover{border-color:var(--sun);color:var(--sun)}
+
+/* ── MARKDOWN RENDERER ── */
+.md-h2{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--sun);margin:22px 0 10px;line-height:1.2}
+.md-h3{font-size:16px;font-weight:800;color:var(--mint);margin:18px 0 8px;display:flex;align-items:center;gap:6px}
+.md-h4{font-size:14px;font-weight:700;color:var(--orange);margin:14px 0 6px}
+.md-p{margin:0 0 12px;line-height:1.75;font-size:15px}
+.md-p:last-child{margin-bottom:0}
+.md-ul,.md-ol{padding-left:22px;margin:6px 0 12px;display:flex;flex-direction:column;gap:5px}
+.md-ul li,.md-ol li{font-size:15px;line-height:1.65;padding-left:4px}
+.md-ul li::marker{color:var(--sun)}
+.md-ol li::marker{color:var(--mint);font-weight:700}
+.msg-body .md-h2,.msg-body .md-h3,.msg-body .md-h4{margin-top:14px}
+.msg-body .md-p{font-size:14px}
+.msg-body .md-ul li,.msg-body .md-ol li{font-size:14px}
+/* Lesson body wrapper */
+.lesson-body{line-height:1.8;font-size:15px;max-width:680px}
+/* Math Visuals */
+.math-visual{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin:14px 0;display:inline-block}
+.math-visual-lbl{font-size:11px;color:var(--muted);margin-top:6px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Math<span>Mind</span></div>
+    <div class="login-sub">NYC Standards · i-Ready · Eureka Math · K–12</div>
+    <div class="role-pills">
+      <div class="role-pill active" onclick="setRole(this,'student')" data-role="student">🎒 Student</div>
+      <div class="role-pill" onclick="setRole(this,'teacher')" data-role="teacher">🍎 Teacher</div>
+      <div class="role-pill" onclick="setRole(this,'parent')" data-role="parent">👨‍👩‍👧 Parent</div>
+    </div>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" id="loginName" placeholder="Your name" value="Alex Rivera" />
+    </div>
+    <div class="form-row" id="studentFields">
+      <div class="form-group">
+        <label>Grade</label>
+        <select id="loginGrade">
+          <option>K</option><option>1</option><option>2</option><option>3</option>
+          <option selected>4</option><option>5</option><option>6</option>
+          <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Class Code</label>
+        <input type="text" value="NYC-304" />
+      </div>
+    </div>
+    <button class="btn btn-sun" style="width:100%;justify-content:center;font-size:15px;padding:14px" onclick="doLogin()">Enter MathMind →</button>
+  </div>
+</div>
+
+<!-- HAMBURGER -->
+<button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">Math<span>Mind</span></div>
+
+    <div class="nav-section">Learn</div>
+    <div class="nav-item active" onclick="nav('dashboard')" id="nav-dashboard"><span class="icon">🏠</span>Dashboard</div>
+    <div class="nav-item" onclick="nav('lessons')" id="nav-lessons"><span class="icon">📚</span>Lessons</div>
+    <div class="nav-item" onclick="nav('quiz')" id="nav-quiz"><span class="icon">⚡</span>Practice Quiz</div>
+    <div class="nav-item" onclick="nav('tutor')" id="nav-tutor"><span class="icon">🤖</span>AI Tutor</div>
+    <div class="nav-item" onclick="nav('progress')" id="nav-progress"><span class="icon">📈</span>My Progress</div>
+
+    <div class="nav-section teacher-only" style="display:none">Teach</div>
+    <div class="nav-item teacher-only" onclick="nav('grader')" id="nav-grader" style="display:none"><span class="icon">✅</span>Grade Papers<span class="badge-count" id="gradeBadge">3</span></div>
+    <div class="nav-item teacher-only" onclick="nav('classes')" id="nav-classes" style="display:none"><span class="icon">👥</span>My Classes</div>
+
+    <div class="nav-spacer"></div>
+    <div class="user-chip" id="userChip">
+      <div class="avatar" id="userAvatar" style="background:var(--sun)">A</div>
+      <div class="info">
+        <div class="name" id="userName">Alex Rivera</div>
+        <div class="role" id="userRoleLabel">Grade 4 · Student</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header">
+        <div class="page-title">Good morning, <em id="dashName">Alex</em> 👋</div>
+        <div class="page-sub" id="dashSub">Grade 4 · Week 12 · NYC Math Standards</div>
+      </div>
+
+      <div class="g4" style="margin-bottom:20px">
+        <div class="stat"><div class="stat-num" style="color:var(--sun)" id="statStreak">7</div><div class="stat-lbl">Day Streak 🔥</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--green)" id="statScore">84%</div><div class="stat-lbl">Avg Score</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--mint)" id="statLessons">12</div><div class="stat-lbl">Lessons Done</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--purple)" id="statLevel">On Grade</div><div class="stat-lbl">i-Ready Level</div></div>
+      </div>
+
+      <div class="g2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-title">📅 Weekly Streak</div>
+          <div class="streaks" id="streakRow"></div>
+          <p style="font-size:12px;color:var(--muted);margin-top:10px">Keep going! You're on a 7-day streak.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 Today's Goals</div>
+          <div id="todayGoals"></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">🔥 Continue Where You Left Off</div>
+          <div id="continueLesson"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚠️ Skills Needing Practice</div>
+          <div id="weakSkills"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LESSONS ═══ -->
+    <div class="view" id="view-lessons">
+      <div class="page-header">
+        <div class="page-title">📚 Lessons</div>
+        <div class="page-sub" id="lessonsSub">Personalized for your grade & skill level</div>
+      </div>
+
+      <div class="tab-row">
+        <div class="tab active" onclick="lessonTab(this,'recommended')">Recommended</div>
+        <div class="tab" onclick="lessonTab(this,'all')">All Topics</div>
+        <div class="tab" onclick="lessonTab(this,'completed')">Completed</div>
+      </div>
+
+      <div id="lessonsGrid" class="g3"></div>
+
+      <!-- Single Lesson View -->
+      <div id="lessonDetail" style="display:none">
+        <button class="btn btn-ghost btn-sm" onclick="closeLessonDetail()" style="margin-bottom:16px">← Back to Lessons</button>
+        <div class="card" id="lessonDetailContent">
+          <div class="loading-state"><div class="spinner"></div><p>Loading lesson...</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ QUIZ ═══ -->
+    <div class="view" id="view-quiz">
+      <div id="quizSetup">
+        <div class="page-header">
+          <div class="page-title">⚡ Practice Quiz</div>
+          <div class="page-sub">AI-generated questions aligned to your grade & NYC standards</div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Quiz Settings</div>
+            <div class="form-group">
+              <label>Topic / Domain</label>
+              <select id="quizDomain">
+                <option value="Operations & Algebraic Thinking">Operations & Algebraic Thinking</option>
+                <option value="Number & Operations in Base Ten">Number & Operations in Base Ten</option>
+                <option value="Number & Operations — Fractions">Fractions</option>
+                <option value="Measurement & Data">Measurement & Data</option>
+                <option value="Geometry">Geometry</option>
+                <option value="Mixed Review">Mixed Review</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Difficulty</label>
+                <select id="quizDiff">
+                  <option>Below Grade</option>
+                  <option selected>On Grade</option>
+                  <option>Above Grade</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Questions</label>
+                <select id="quizCount">
+                  <option value="5">5 questions</option>
+                  <option value="10" selected>10 questions</option>
+                  <option value="15">15 questions</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>AI Tutoring on Wrong Answers</label>
+              <select id="quizTutoring">
+                <option value="yes">Yes — explain mistakes</option>
+                <option value="hint">Hints only</option>
+                <option value="no">No — just score</option>
+              </select>
+            </div>
+            <button class="btn btn-sun" style="width:100%;justify-content:center" onclick="startQuiz()">Generate Quiz ⚡</button>
+          </div>
+          <div class="card">
+            <div class="card-title">📊 Recent Quizzes</div>
+            <div id="recentQuizzes"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizActive" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div>
+            <span id="qProgress" style="font-size:13px;color:var(--muted);font-weight:700"></span>
+            <div class="prog-track" style="width:200px;margin-top:6px"><div class="prog-fill" id="qProgBar" style="background:var(--sun);width:0%"></div></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="endQuiz()">End Quiz</button>
+        </div>
+        <div id="questionArea"></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-ghost" id="hintBtn" onclick="getHint()" style="display:none">💡 Hint</button>
+          <button class="btn btn-mint" id="nextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+          <button class="btn btn-sun" id="submitBtn" onclick="submitAnswer()">Check Answer</button>
+        </div>
+        <div id="tutorBox" class="tutor-response">
+          <div class="tutor-label">🤖 AI Tutor</div>
+          <div id="tutorText"></div>
+        </div>
+      </div>
+
+      <div id="quizResults" style="display:none">
+        <div class="score-screen">
+          <div class="score-ring" id="scoreRing">
+            <div>
+              <div class="big-score" id="finalScore" style="color:var(--sun)">0</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">out of <span id="finalTotal">10</span></div>
+            </div>
+          </div>
+          <div id="scoreMsg" style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:8px"></div>
+          <div id="scoreStandards" style="margin:12px 0"></div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+            <button class="btn btn-sun" onclick="retakeQuiz()">Try Again</button>
+            <button class="btn btn-ghost" onclick="reviewMistakes()">Review Mistakes</button>
+            <button class="btn btn-mint" onclick="nav('tutor')">Ask AI Tutor</button>
+          </div>
+        </div>
+        <div id="mistakeReview" style="display:none;margin-top:20px"></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI TUTOR ═══ -->
+    <div class="view" id="view-tutor">
+      <div class="page-header">
+        <div class="page-title">🤖 AI Tutor</div>
+        <div class="page-sub">Ask anything — I explain using NYC standards & Eureka Math methods</div>
+      </div>
+      <div class="chat-wrap">
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg ai">
+            <div class="ai-label">MathMind Tutor</div>
+            Hi! I'm your personal math tutor. I know the NYC curriculum, i-Ready levels, and Eureka Math inside and out. What would you like to learn today? 😊<br><br>
+            <strong>Try asking:</strong><br>
+            • "Explain how to multiply fractions"<br>
+            • "I got this wrong: 24 × 6 = 126. Why?"<br>
+            • "Show me how to find the area of a rectangle"
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Ask me anything about math..." onkeydown="if(event.key==='Enter')sendChat()" />
+          <button class="btn btn-mint" onclick="sendChat()">Send ↑</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROGRESS ═══ -->
+    <div class="view" id="view-progress">
+      <div class="page-header">
+        <div class="page-title">📈 My Progress</div>
+        <div class="page-sub" id="progressSub">Tracking your growth against NYC standards</div>
+      </div>
+
+      <div class="g4" style="margin-bottom:20px">
+        <div class="stat"><div class="stat-num" style="color:var(--sun)" id="pStatTotal">24</div><div class="stat-lbl">Total Quizzes</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--green)" id="pStatAvg">81%</div><div class="stat-lbl">Average Score</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--orange)" id="pStatStd">18</div><div class="stat-lbl">Standards Practiced</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--purple)" id="pStatLevel">Grade 4+</div><div class="stat-lbl">i-Ready Level</div></div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">📊 Skills Breakdown</div>
+          <div id="skillsBreakdown"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🗓 Recent Activity</div>
+          <div id="recentActivity"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">📋 NY Standards Progress</div>
+        <div id="standardsProgress"></div>
+      </div>
+    </div>
+
+    <!-- ═══ GRADER (Teacher) ═══ -->
+    <div class="view" id="view-grader">
+      <div class="page-header">
+        <div class="page-title">✅ Grade Papers</div>
+        <div class="page-sub">AI-powered grading aligned to NYC standards, i-Ready & Eureka Math</div>
+      </div>
+
+      <div id="graderForm">
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Assignment Info</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Grade Level</label>
+                <select id="grGrade">
+                  <option>K</option><option>1</option><option>2</option><option>3</option>
+                  <option selected>4</option><option>5</option><option>6</option>
+                  <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Framework</label>
+                <select id="grFramework">
+                  <option>NY State + i-Ready</option>
+                  <option>NY State + Eureka Math</option>
+                  <option>All Frameworks</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Domain</label>
+                <select id="grDomain">
+                  <option>Operations & Algebraic Thinking</option>
+                  <option>Number & Operations in Base Ten</option>
+                  <option>Fractions</option>
+                  <option>Measurement & Data</option>
+                  <option>Geometry</option>
+                  <option>Mixed</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Total Points</label>
+                <input type="number" id="grPoints" value="20" min="1" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Focus Areas</label>
+              <div id="focusTags">
+                <span class="rtag sel" data-v="Conceptual Understanding">Conceptual</span>
+                <span class="rtag sel" data-v="Procedural Fluency">Procedural</span>
+                <span class="rtag sel" data-v="Problem Solving">Problem Solving</span>
+                <span class="rtag" data-v="Reasoning">Reasoning</span>
+                <span class="rtag" data-v="Show Work">Show Work</span>
+                <span class="rtag" data-v="Vocabulary">Vocabulary</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Specific Standard (optional)</label>
+              <input type="text" id="grStandard" placeholder="e.g. NY-4.NBT.5, NY-4.OA.3" />
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Student Work</div>
+            <div class="form-group">
+              <label>Upload Photo</label>
+              <div class="upload-zone" id="grUpload">
+                <input type="file" id="grFile" accept="image/*" onchange="previewGraderImage(event)" />
+                <div style="font-size:28px;margin-bottom:6px">📄</div>
+                <p style="font-size:13px;color:var(--muted)"><strong style="color:var(--mint)">Click</strong> to upload student paper</p>
+              </div>
+              <img id="grPreview" class="preview-img" style="display:none" />
+            </div>
+            <div class="form-group">
+              <label>Or Type Student's Work</label>
+              <textarea id="grWork" placeholder="Problem 1: 24×6=144 ✓&#10;Problem 2: 1/3+1/4=2/7 (error)&#10;..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Answer Key (optional)</label>
+              <textarea id="grKey" placeholder="P1: 144&#10;P2: 7/12&#10;..." style="min-height:60px"></textarea>
+            </div>
+            <button class="btn btn-sun" style="width:100%;justify-content:center" onclick="runGrader()">⚡ Grade with AI</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="graderLoading" class="loading-state" style="display:none">
+        <div class="spinner"></div>
+        <p>Analyzing against NY standards...</p>
+      </div>
+
+      <div id="graderResults" style="display:none">
+        <button class="btn btn-ghost btn-sm" onclick="resetGrader()" style="margin-bottom:16px">← Grade Another</button>
+        <div class="g4" id="gradeScoreRow" style="margin-bottom:16px"></div>
+        <div class="card" id="gradeResultBody"></div>
+      </div>
+    </div>
+
+    <!-- ═══ CLASSES (Teacher) ═══ -->
+    <div class="view" id="view-classes">
+      <div class="page-header">
+        <div class="page-title">👥 My Classes</div>
+        <div class="page-sub">Class overview and student progress</div>
+      </div>
+      <div class="g3" id="classCards"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let state = {
+  user: { name:'Alex Rivera', grade:'4', role:'student' },
+  quizQuestions: [], quizCurrent: 0, quizAnswers: [],
+  quizSettings: {}, quizStarted: false,
+  chatHistory: [],
+  progress: {
+    streak: 7, avgScore: 84, lessonsCompleted: 12,
+    quizHistory: [
+      { topic:'Fractions', score:8, total:10, date:'Mar 20' },
+      { topic:'Multiplication', score:9, total:10, date:'Mar 18' },
+      { topic:'Geometry', score:6, total:10, date:'Mar 15' },
+    ],
+    skills: [
+      { name:'Multiplication & Division', pct:88 },
+      { name:'Fractions', pct:72 },
+      { name:'Measurement', pct:65 },
+      { name:'Geometry', pct:80 },
+      { name:'Number Sense', pct:91 },
+    ],
+    standards: [
+      { code:'NY-4.OA.1', desc:'Interpret multiplication equations', pct:90 },
+      { code:'NY-4.NBT.5', desc:'Multiply multi-digit numbers', pct:75 },
+      { code:'NY-4.NF.1', desc:'Equivalent fractions', pct:68 },
+      { code:'NY-4.MD.3', desc:'Area and perimeter', pct:82 },
+    ]
+  },
+  lessons: [
+    { id:1, title:'Multiply 2-Digit Numbers', tag:'new', icon:'✖️', domain:'Operations & Algebraic Thinking', std:'NY-4.NBT.5', mins:15, done:false },
+    { id:2, title:'Equivalent Fractions', tag:'review', icon:'🍕', domain:'Fractions', std:'NY-4.NF.1', mins:12, done:false },
+    { id:3, title:'Area of Rectangles', tag:'new', icon:'📐', domain:'Measurement & Data', std:'NY-4.MD.3', mins:10, done:true },
+    { id:4, title:'Compare Fractions', tag:'review', icon:'⚖️', domain:'Fractions', std:'NY-4.NF.2', mins:12, done:false },
+    { id:5, title:'Multi-Step Word Problems', tag:'new', icon:'📝', domain:'Operations & Algebraic Thinking', std:'NY-4.OA.3', mins:18, done:false },
+    { id:6, title:'Place Value & Rounding', tag:'review', icon:'🔢', domain:'Number & Operations', std:'NY-4.NBT.3', mins:10, done:true },
+    { id:7, title:'Angles & Lines', tag:'locked', icon:'📏', domain:'Geometry', std:'NY-4.G.1', mins:14, done:false },
+    { id:8, title:'Decimal Notation', tag:'locked', icon:'🔣', domain:'Number & Operations', std:'NY-4.NF.6', mins:16, done:false },
+    { id:9, title:'Division Strategies', tag:'review', icon:'➗', domain:'Operations & Algebraic Thinking', std:'NY-4.NBT.6', mins:15, done:true },
+  ],
+  graderImg: null,
+  lastQuizWrong: []
+};
+
+// ═══════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════
+let selectedRole = 'student';
+function setRole(el, role) {
+  selectedRole = role;
+  document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('studentFields').style.display = role === 'student' ? 'grid' : 'none';
+}
+function doLogin() {
+  const name = document.getElementById('loginName').value || 'User';
+  const grade = document.getElementById('loginGrade').value;
+  state.user = { name, grade, role: selectedRole };
+  document.getElementById('loginScreen').style.display = 'none';
+  initApp();
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function initApp() {
+  const u = state.user;
+  document.getElementById('userName').textContent = u.name;
+  document.getElementById('dashName').textContent = u.name.split(' ')[0];
+  document.getElementById('userAvatar').textContent = u.name[0];
+  document.getElementById('userAvatar').style.background = u.role === 'teacher' ? 'var(--coral)' : u.role === 'parent' ? 'var(--mint)' : 'var(--sun)';
+  document.getElementById('userRoleLabel').textContent = u.role === 'student' ? `Grade ${u.grade} · Student` : u.role === 'teacher' ? 'Teacher' : 'Parent';
+  document.getElementById('dashSub').textContent = `Grade ${u.grade} · NYC Math Standards · i-Ready & Eureka Math`;
+  document.getElementById('lessonsSub').textContent = `Personalized for Grade ${u.grade}`;
+  document.getElementById('progressSub').textContent = `Your progress through Grade ${u.grade} NYC standards`;
+
+  // Teacher nav
+  if (u.role === 'teacher') {
+    document.querySelectorAll('.teacher-only').forEach(el => el.style.display = 'flex');
+  }
+
+  buildDashboard();
+  buildProgress();
+  buildLessons('recommended');
+  buildClasses();
+  populateRecentQuizzes();
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function nav(page) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const v = document.getElementById('view-'+page);
+  if (v) v.classList.add('active');
+  const n = document.getElementById('nav-'+page);
+  if (n) n.classList.add('active');
+  // Close sidebar on mobile after navigation
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+function buildDashboard() {
+  const p = state.progress;
+  document.getElementById('statStreak').textContent = p.streak;
+  document.getElementById('statScore').textContent = p.avgScore + '%';
+  document.getElementById('statLessons').textContent = p.lessonsCompleted;
+
+  // Streak row
+  const days = ['M','T','W','T','F','S','S'];
+  const streakHtml = days.map((d, i) => {
+    const cls = i < 5 ? 'streak-done' : i === 5 ? 'streak-today' : 'streak-miss';
+    return `<div class="streak-day ${cls}">${d}</div>`;
+  }).join('');
+  document.getElementById('streakRow').innerHTML = streakHtml;
+
+  // Today's goals
+  document.getElementById('todayGoals').innerHTML = `
+    <div class="skill-row"><span class="skill-name">Complete 1 lesson</span><span style="font-size:18px">✅</span></div>
+    <div class="skill-row"><span class="skill-name">Take a practice quiz</span><span style="font-size:18px">⭕</span></div>
+    <div class="skill-row"><span class="skill-name">Practice fractions (weak skill)</span><span style="font-size:18px">⭕</span></div>
+  `;
+
+  // Continue lesson
+  const next = state.lessons.find(l => !l.done && l.tag !== 'locked');
+  if (next) {
+    document.getElementById('continueLesson').innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 0">
+        <div style="font-size:36px">${next.icon}</div>
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:15px">${next.title}</div>
+          <div style="font-size:12px;color:var(--muted);margin:3px 0">${next.domain} · ${next.mins} min</div>
+          <span class="std-tag">${next.std}</span>
+        </div>
+      </div>
+      <button class="btn btn-sun btn-sm" onclick="openLesson(${next.id})" style="width:100%;justify-content:center;margin-top:8px">Continue →</button>
+    `;
+  }
+
+  // Weak skills
+  const weak = [...p.skills].sort((a,b)=>a.pct-b.pct).slice(0,3);
+  document.getElementById('weakSkills').innerHTML = weak.map(s => `
+    <div class="skill-row">
+      <div class="skill-name" style="font-size:13px">${s.name}</div>
+      <div class="skill-bar"><div class="prog-track"><div class="prog-fill" style="width:${s.pct}%;background:${s.pct<70?'var(--red)':'var(--warn)'}"></div></div></div>
+      <div class="skill-pct">${s.pct}%</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+// LESSONS
+// ═══════════════════════════════════════════
+function lessonTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  buildLessons(tab);
+}
+
+function buildLessons(tab) {
+  let lessons = state.lessons;
+  if (tab === 'recommended') lessons = lessons.filter(l => l.tag !== 'locked');
+  if (tab === 'completed') lessons = lessons.filter(l => l.done);
+  document.getElementById('lessonsGrid').style.display = 'grid';
+  document.getElementById('lessonDetail').style.display = 'none';
+  document.getElementById('lessonsGrid').innerHTML = lessons.map(l => `
+    <div class="lesson-card" onclick="${l.tag==='locked' ? "showToast('Complete previous lessons to unlock this one 🔒')" : `openLesson(${l.id})`}">
+      <div class="lesson-icon">${l.icon}</div>
+      <span class="lesson-tag ${l.tag==='new'?'tag-new':l.tag==='review'?'tag-review':'tag-locked'}">${l.tag==='locked'?'🔒 LOCKED':l.tag==='new'?'✨ NEW':'🔄 REVIEW'}</span>
+      <div class="lesson-title">${l.title}</div>
+      <div class="lesson-meta">
+        <span>${l.mins} min</span>
+        <span class="std-tag">${l.std}</span>
+      </div>
+      ${l.done ? `<div style="margin-top:8px;font-size:12px;color:var(--green);font-weight:700">✅ Completed</div>` : ''}
+    </div>
+  `).join('') || `<div style="grid-column:1/-1;color:var(--muted);text-align:center;padding:40px">No lessons in this category yet.</div>`;
+}
+
+async function openLesson(id) {
+  const lesson = state.lessons.find(l => l.id === id);
+  if (!lesson) return;
+  document.getElementById('lessonsGrid').style.display = 'none';
+  document.getElementById('lessonDetail').style.display = 'block';
+  document.getElementById('lessonDetailContent').innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Loading lesson from AI...</p></div>`;
+
+  const prompt = `Create a complete, engaging math lesson for a Grade ${state.user.grade} NYC student on the topic: "${lesson.title}" (Standard: ${lesson.std}, Domain: ${lesson.domain}).
+
+Structure it with:
+1. 🎯 Learning Goal (1 sentence, kid-friendly)
+2. 📖 Explanation (clear, step-by-step, use simple numbers as examples, reference Eureka Math approach and i-Ready vocabulary)
+3. ✏️ Worked Example (show 2 complete examples with all steps)
+4. 🧠 Key Vocabulary (3-5 words with simple definitions)
+5. 💡 Tips & Tricks (2-3 practical tips)
+6. 🔗 NY Standard Connection (explain how this connects to ${lesson.std})
+
+Write in a friendly, encouraging tone for a ${state.user.grade === 'K' ? 'kindergartner' : `Grade ${state.user.grade} student`}. Use emojis. Use simple markdown: ## for section headers, **bold** for key terms, - for bullet points. Do NOT use code fences or ASCII art diagrams.
+
+For visual models, use these special tags (they render as real shapes in the app):
+- Fraction strip: <fraction-strip n="1" d="4"/> (shows 1 out of 4 shaded)
+- Area model grid: <area-model rows="3" cols="4"/> (shows a 3×4 rectangle grid)
+- Number line: <number-line from="0" to="1" marks="0,1/4,1/2,3/4,1"/>
+Use these whenever a visual would help (fractions, multiplication, area, etc). Keep it under 600 words.`;
+
+  try {
+    const res = await callClaude(prompt, 'You are a friendly NYC elementary/middle school math teacher who knows Eureka Math and i-Ready curricula deeply.');
+    lesson.done = true;
+    document.getElementById('lessonDetailContent').innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+        <div style="font-size:48px">${lesson.icon}</div>
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900">${lesson.title}</div>
+          <div style="display:flex;gap:8px;margin-top:6px"><span class="std-tag">${lesson.std}</span><span style="font-size:12px;color:var(--muted)">${lesson.mins} min</span></div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="lesson-body">${formatLesson(res)}</div>
+      <hr class="divider">
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-sun" onclick="nav('quiz')">Practice This Topic ⚡</button>
+        <button class="btn btn-ghost" onclick="closeLessonDetail()">← Back</button>
+      </div>
+    `;
+    state.progress.lessonsCompleted++;
+  } catch(e) {
+    document.getElementById('lessonDetailContent').innerHTML = `<p style="color:var(--red)">Error loading lesson. Please try again.</p>`;
+  }
+}
+
+// ═══════════════════════════════════════════
+// VISUAL MATH SHAPE GENERATORS
+// ═══════════════════════════════════════════
+const VIS_COLORS = ['#FFD93D','#4ECDC4','#FF6B6B','#C084FC','#FDB97D','#6EE7B7'];
+
+function makeFractionStrip(n, d) {
+  n = Math.min(parseInt(n)||0, parseInt(d)||1);
+  d = Math.max(parseInt(d)||1, 1);
+  const W = 320, H = 44, pad = 2;
+  const partW = W / d;
+  const color = VIS_COLORS[d % VIS_COLORS.length];
+  let rects = '';
+  for (let i = 0; i < d; i++) {
+    const x = i * partW + pad, w = partW - pad * 2;
+    const filled = i < n;
+    rects += `<rect x="${x.toFixed(1)}" y="${pad}" width="${w.toFixed(1)}" height="${H - pad*2}"
+      fill="${filled ? color : 'rgba(255,255,255,0.04)'}"
+      stroke="${filled ? color : '#2d3f63'}" stroke-width="1.5" rx="4"/>`;
+    rects += `<text x="${(x + w/2).toFixed(1)}" y="${H/2 + 5}"
+      text-anchor="middle" font-size="12" font-weight="700" font-family="Nunito,sans-serif"
+      fill="${filled ? '#1a1a2e' : '#4a5a7a'}">${n}/${d}</text>`;
+  }
+  return `<div class="math-visual">
+    <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">${rects}</svg>
+    <div class="math-visual-lbl">${n} out of ${d} parts shaded</div>
+  </div>`;
+}
+
+function makeAreaModel(rows, cols, labels) {
+  rows = Math.min(parseInt(rows)||1, 20);
+  cols = Math.min(parseInt(cols)||1, 20);
+  const cellW = Math.max(28, Math.min(52, Math.floor(280/cols)));
+  const cellH = Math.max(28, Math.min(52, Math.floor(220/rows)));
+  const W = cols * cellW, H = rows * cellH;
+  let cells = '';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = c * cellW, y = r * cellH;
+      const ci = (r + c) % VIS_COLORS.length;
+      const fill = VIS_COLORS[ci] + '44';
+      const stroke = VIS_COLORS[ci] + 'bb';
+      cells += `<rect x="${x+1}" y="${y+1}" width="${cellW-2}" height="${cellH-2}"
+        fill="${fill}" stroke="${stroke}" stroke-width="1.5" rx="3"/>`;
+    }
+  }
+  // Col labels (top)
+  let colLabels = '', rowLabels = '';
+  if (labels) {
+    const lArr = labels.split(',');
+    for (let c = 0; c < cols; c++) {
+      const lbl = lArr[c] ? lArr[c].trim() : String(c+1);
+      colLabels += `<text x="${c*cellW + cellW/2}" y="-6"
+        text-anchor="middle" font-size="11" fill="#8899bb" font-family="Nunito">${lbl}</text>`;
+    }
+    for (let r = 0; r < rows; r++) {
+      const lbl = lArr[cols + r] ? lArr[cols + r].trim() : String(r+1);
+      rowLabels += `<text x="-6" y="${r*cellH + cellH/2 + 4}"
+        text-anchor="end" font-size="11" fill="#8899bb" font-family="Nunito">${lbl}</text>`;
+    }
+  }
+  return `<div class="math-visual">
+    <svg width="${W+36}" height="${H+28}" viewBox="-28 -18 ${W+36} ${H+28}" style="display:block">
+      ${cells}${colLabels}${rowLabels}
+    </svg>
+    <div class="math-visual-lbl">${rows} × ${cols} = ${rows*cols}</div>
+  </div>`;
+}
+
+function makeNumberLine(from, to, marks) {
+  from = parseFloat(from) || 0;
+  to = parseFloat(to) || 1;
+  const W = 320, H = 60, y = 30, pad = 20;
+  const range = to - from;
+  const scale = (v) => pad + ((v - from) / range) * (W - pad*2);
+  let svg = `<line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="#2d3f63" stroke-width="2"/>`;
+  // Arrow heads
+  svg += `<polygon points="${W-pad},${y} ${W-pad-8},${y-4} ${W-pad-8},${y+4}" fill="#2d3f63"/>`;
+  const markArr = marks ? marks.split(',') : [String(from), String(to)];
+  markArr.forEach(m => {
+    m = m.trim();
+    const val = eval(m.replace(/(\d+)\/(\d+)/,'($1/$2)'));
+    const x = scale(val);
+    svg += `<line x1="${x}" y1="${y-10}" x2="${x}" y2="${y+10}" stroke="${VIS_COLORS[0]}" stroke-width="2"/>`;
+    svg += `<text x="${x}" y="${y+26}" text-anchor="middle" font-size="12" font-weight="700"
+      fill="#EEF2FF" font-family="Nunito">${m}</text>`;
+  });
+  return `<div class="math-visual">
+    <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">${svg}</svg>
+  </div>`;
+}
+
+function renderVisuals(html) {
+  // <fraction-strip n="1" d="4"/>
+  html = html.replace(/<fraction-strip\s+n="(\d+)"\s+d="(\d+)"\s*\/?>/gi,
+    (_, n, d) => makeFractionStrip(n, d));
+  // <area-model rows="3" cols="4"/> or with labels="1,2,3,10,20,30"
+  html = html.replace(/<area-model\s+rows="(\d+)"\s+cols="(\d+)"(?:\s+labels="([^"]*)")?\s*\/?>/gi,
+    (_, r, c, lbl) => makeAreaModel(r, c, lbl));
+  // <number-line from="0" to="1" marks="0,1/4,1/2,3/4,1"/>
+  html = html.replace(/<number-line\s+from="([^"]+)"\s+to="([^"]+)"\s+marks="([^"]*)"\s*\/?>/gi,
+    (_, f, t, m) => makeNumberLine(f, t, m));
+  return html;
+}
+
+function renderMarkdown(text) {
+  // Strip code fences (```html ... ```)
+  text = text.replace(/```[\w]*\n?/g, '').replace(/```/g, '');
+  // Headings
+  text = text.replace(/^#### (.+)$/gm, '<h4 class="md-h4">$1</h4>');
+  text = text.replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>');
+  text = text.replace(/^## (.+)$/gm,  '<h2 class="md-h2">$1</h2>');
+  text = text.replace(/^# (.+)$/gm,   '<h2 class="md-h2">$1</h2>');
+  // Bold & italic
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Horizontal rules
+  text = text.replace(/^---+$/gm, '<hr class="divider">');
+  // Bullet lists — group consecutive lines starting with -
+  text = text.replace(/((?:^- .+\n?)+)/gm, (match) => {
+    const items = match.trim().split('\n')
+      .map(l => `<li>${l.replace(/^- /, '')}</li>`).join('');
+    return `<ul class="md-ul">${items}</ul>`;
+  });
+  // Numbered lists
+  text = text.replace(/((?:^\d+\. .+\n?)+)/gm, (match) => {
+    const items = match.trim().split('\n')
+      .map(l => `<li>${l.replace(/^\d+\. /, '')}</li>`).join('');
+    return `<ol class="md-ol">${items}</ol>`;
+  });
+  // Paragraphs — double newlines
+  const blocks = text.split(/\n{2,}/);
+  const html = blocks.map(b => {
+    b = b.trim();
+    if (!b) return '';
+    // Don't wrap block elements in <p>
+    if (/^<(h[1-6]|ul|ol|hr|div|blockquote)/.test(b)) return b;
+    return `<p class="md-p">${b.replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+  return renderVisuals(html);
+}
+
+function formatLesson(text) {
+  return renderMarkdown(text);
+}
+
+function closeLessonDetail() {
+  document.getElementById('lessonDetail').style.display = 'none';
+  document.getElementById('lessonsGrid').style.display = 'grid';
+}
+
+// ═══════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════
+function populateRecentQuizzes() {
+  document.getElementById('recentQuizzes').innerHTML = state.progress.quizHistory.map(q => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-weight:700;font-size:14px">${q.topic}</div>
+        <div style="font-size:11px;color:var(--muted)">${q.date}</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:${q.score/q.total>=.8?'var(--green)':q.score/q.total>=.6?'var(--warn)':'var(--red)'}">${q.score}/${q.total}</div>
+    </div>
+  `).join('');
+}
+
+async function startQuiz() {
+  const domain = document.getElementById('quizDomain').value;
+  const diff = document.getElementById('quizDiff').value;
+  const count = parseInt(document.getElementById('quizCount').value);
+  const tutoring = document.getElementById('quizTutoring').value;
+
+  state.quizSettings = { domain, diff, count, tutoring };
+  state.quizQuestions = [];
+  state.quizCurrent = 0;
+  state.quizAnswers = [];
+  state.lastQuizWrong = [];
+
+  document.getElementById('quizSetup').style.display = 'none';
+  document.getElementById('quizActive').style.display = 'block';
+  document.getElementById('quizResults').style.display = 'none';
+
+  const prompt = `Generate ${count} math quiz questions for a Grade ${state.user.grade} student on the topic "${domain}" at "${diff}" difficulty level, aligned to NYC Next Generation Learning Standards.
+
+For each question, provide:
+- A clear math problem (can include arithmetic, word problems, or concept questions)
+- 4 multiple choice options (A, B, C, D)
+- The correct answer letter
+- The specific NY standard code (e.g., NY-4.NBT.5)
+- A brief explanation of why the answer is correct (2-3 sentences, kid-friendly)
+
+Respond ONLY with valid JSON array, no markdown:
+[
+  {
+    "question": "What is 24 × 6?",
+    "options": ["124","144","134","154"],
+    "correct": 1,
+    "standard": "NY-4.NBT.5",
+    "explanation": "To multiply 24 × 6, we can break it apart: 20×6=120 and 4×6=24, then add them: 120+24=144."
+  }
+]`;
+
+  const loadHtml = `<div class="loading-state"><div class="spinner"></div><p>Generating ${count} questions aligned to NY standards...</p></div>`;
+  document.getElementById('questionArea').innerHTML = loadHtml;
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  try {
+    const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only.');
+    const cleaned = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    const match = cleaned.match(/\[[\s\S]*\]/);
+    state.quizQuestions = JSON.parse(match ? match[0] : cleaned);
+    renderQuestion();
+  } catch(e) {
+    document.getElementById('questionArea').innerHTML = `<p style="color:var(--red);text-align:center;padding:40px">Failed to generate quiz. Please try again.</p>`;
+    document.getElementById('quizSetup').style.display = 'block';
+    document.getElementById('quizActive').style.display = 'none';
+  }
+}
+
+function renderQuestion() {
+  const q = state.quizQuestions[state.quizCurrent];
+  const total = state.quizQuestions.length;
+  const cur = state.quizCurrent + 1;
+  document.getElementById('qProgress').textContent = `Question ${cur} of ${total}`;
+  document.getElementById('qProgBar').style.width = `${(cur/total)*100}%`;
+  document.getElementById('submitBtn').style.display = 'inline-flex';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('hintBtn').style.display = state.quizSettings.tutoring !== 'no' ? 'inline-flex' : 'none';
+  document.getElementById('tutorBox').classList.remove('visible');
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('questionArea').innerHTML = `
+    <div class="question-card">
+      <div class="q-num">Question ${cur} · <span class="std-tag">${q.standard || ''}</span></div>
+      <div class="q-text">${q.question}</div>
+      <div class="options" id="optionsContainer">
+        ${q.options.map((opt, i) => `
+          <div class="opt" id="opt-${i}" onclick="selectOpt(${i})">
+            <div class="opt-letter">${letters[i]}</div>
+            ${opt}
+          </div>
+        `).join('')}
+      </div>
+      <div class="feedback-box" id="feedbackBox"></div>
+    </div>
+  `;
+}
+
+let selectedOpt = null;
+function selectOpt(i) {
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('opt-'+i).classList.add('selected');
+  selectedOpt = i;
+}
+
+async function submitAnswer() {
+  if (selectedOpt === null) { showToast('Please select an answer first!'); return; }
+  const q = state.quizQuestions[state.quizCurrent];
+  const correct = selectedOpt === q.correct;
+  state.quizAnswers.push({ q, selected: selectedOpt, correct });
+  if (!correct) state.lastQuizWrong.push({ q, selected: selectedOpt });
+
+  document.querySelectorAll('.opt').forEach((o, i) => {
+    o.style.pointerEvents = 'none';
+    if (i === q.correct) o.classList.add('correct');
+    else if (i === selectedOpt && !correct) o.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  fb.className = 'feedback-box visible ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = correct
+    ? `✅ <strong>Correct!</strong> ${q.explanation}`
+    : `❌ <strong>Incorrect.</strong> The correct answer was <strong>${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}</strong>.<br>${q.explanation}`;
+
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'inline-flex';
+  document.getElementById('nextBtn').textContent = state.quizCurrent < state.quizQuestions.length - 1 ? 'Next Question →' : 'See Results →';
+
+  if (!correct && state.quizSettings.tutoring === 'yes') {
+    await showTutorExplanation(q, selectedOpt);
+  }
+  selectedOpt = null;
+}
+
+async function showTutorExplanation(q, wrongIdx) {
+  document.getElementById('tutorBox').classList.add('visible');
+  document.getElementById('tutorText').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div>';
+  const prompt = `A Grade ${state.user.grade} student got this wrong:
+Question: ${q.question}
+They answered: ${q.options[wrongIdx]}
+Correct answer: ${q.options[q.correct]}
+Standard: ${q.standard}
+
+Give a warm, encouraging 2-3 step explanation of how to get the right answer. Use the Eureka Math approach. Keep it simple and kid-friendly. No more than 100 words.`;
+  try {
+    const res = await callClaude(prompt, 'You are a warm, encouraging NYC math tutor who specializes in Eureka Math and i-Ready.');
+    document.getElementById('tutorText').innerHTML = res;
+  } catch(e) {
+    document.getElementById('tutorText').innerHTML = q.explanation;
+  }
+}
+
+async function getHint() {
+  const q = state.quizQuestions[state.quizCurrent];
+  document.getElementById('tutorBox').classList.add('visible');
+  document.getElementById('tutorText').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div>';
+  const prompt = `Give a short hint (1-2 sentences, NO answer) for this Grade ${state.user.grade} math question: "${q.question}". Standard: ${q.standard}. Be encouraging!`;
+  try {
+    const res = await callClaude(prompt, 'You are a helpful math tutor. Give hints, never spoil the answer.');
+    document.getElementById('tutorText').innerHTML = '💡 <strong>Hint:</strong> ' + res;
+  } catch(e) {
+    document.getElementById('tutorText').innerHTML = 'Think carefully about the numbers involved!';
+  }
+}
+
+function nextQuestion() {
+  state.quizCurrent++;
+  if (state.quizCurrent >= state.quizQuestions.length) {
+    showQuizResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showQuizResults() {
+  document.getElementById('quizActive').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'block';
+  const correct = state.quizAnswers.filter(a => a.correct).length;
+  const total = state.quizAnswers.length;
+  const pct = Math.round((correct/total)*100);
+  document.getElementById('finalScore').textContent = correct;
+  document.getElementById('finalTotal').textContent = total;
+  const ring = document.getElementById('scoreRing');
+  ring.style.borderColor = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--warn)' : 'var(--red)';
+  document.getElementById('finalScore').style.color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--warn)' : 'var(--red)';
+  document.getElementById('scoreMsg').textContent = pct >= 90 ? '🌟 Outstanding!' : pct >= 80 ? '🎉 Great job!' : pct >= 60 ? '👍 Good effort!' : '💪 Keep practicing!';
+
+  const stds = [...new Set(state.quizAnswers.map(a => a.q.standard))];
+  document.getElementById('scoreStandards').innerHTML = stds.map(s => `<span class="std-tag">${s}</span>`).join('');
+
+  state.progress.quizHistory.unshift({ topic: state.quizSettings.domain, score: correct, total, date: 'Today' });
+  if (state.progress.quizHistory.length > 5) state.progress.quizHistory.pop();
+  state.progress.avgScore = Math.round((state.progress.avgScore * 0.7 + pct * 0.3));
+  buildProgress();
+}
+
+function retakeQuiz() {
+  document.getElementById('quizResults').style.display = 'none';
+  document.getElementById('quizSetup').style.display = 'block';
+  populateRecentQuizzes();
+}
+
+function endQuiz() {
+  document.getElementById('quizActive').style.display = 'none';
+  document.getElementById('quizSetup').style.display = 'block';
+}
+
+function reviewMistakes() {
+  const mr = document.getElementById('mistakeReview');
+  if (!state.lastQuizWrong.length) { mr.style.display = 'block'; mr.innerHTML = '<p style="color:var(--green);text-align:center;padding:20px">🎉 No mistakes to review!</p>'; return; }
+  mr.style.display = 'block';
+  const letters = ['A','B','C','D'];
+  mr.innerHTML = `<div style="font-family:\'Fraunces\',serif;font-size:20px;font-weight:900;margin-bottom:16px">Review Your Mistakes</div>` +
+    state.lastQuizWrong.map(({q, selected}) => `
+      <div class="question-card" style="margin-bottom:12px">
+        <div class="q-num"><span class="std-tag">${q.standard}</span></div>
+        <div class="q-text">${q.question}</div>
+        <div style="margin:8px 0"><span style="color:var(--red)">Your answer: ${letters[selected]}) ${q.options[selected]}</span></div>
+        <div style="margin:8px 0"><span style="color:var(--green)">✓ Correct: ${letters[q.correct]}) ${q.options[q.correct]}</span></div>
+        <div class="feedback-box wrong visible">${q.explanation}</div>
+      </div>
+    `).join('');
+}
+
+// ═══════════════════════════════════════════
+// AI TUTOR CHAT
+// ═══════════════════════════════════════════
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  appendMsg(msg, 'user');
+  state.chatHistory.push({ role:'user', content: msg });
+
+  const typingEl = document.createElement('div');
+  typingEl.className = 'msg ai';
+  typingEl.innerHTML = '<div class="ai-label">MathMind Tutor</div><div class="spinner" style="width:18px;height:18px;border-width:2px;margin:4px 0"></div>';
+  document.getElementById('chatMsgs').appendChild(typingEl);
+  scrollChat();
+
+  try {
+    const sys = `You are MathMind, a warm and encouraging NYC math tutor for a Grade ${state.user.grade} student. You know the NYC Next Generation Learning Standards, i-Ready Math curriculum, and Eureka Math modules deeply. When explaining math:
+- Always reference the relevant NY standard code
+- Use Eureka Math strategies and vocabulary when appropriate
+- Break problems into clear numbered steps
+- Be encouraging, patient, and age-appropriate for Grade ${state.user.grade}
+- Use emojis occasionally to keep it engaging
+- Keep responses concise but complete
+- Use markdown: **bold** for key terms, - for bullets, ## for headings. Never use ASCII art or code fences.
+- For visuals use these tags (they render as real shapes): <fraction-strip n="1" d="4"/>, <area-model rows="3" cols="4"/>, <number-line from="0" to="1" marks="0,1/4,1/2,3/4,1"/>. Use them whenever a picture would help!`;
+
+    const messages = state.chatHistory.map(m => ({ role: m.role, content: m.content }));
+    const res = await callClaudeMessages(messages, sys);
+    typingEl.remove();
+    state.chatHistory.push({ role:'assistant', content: res });
+    appendMsg(res, 'ai');
+  } catch(e) {
+    typingEl.remove();
+    appendMsg('Sorry, I had trouble connecting. Please try again!', 'ai');
+  }
+}
+
+function appendMsg(text, role) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  if (role === 'ai') {
+    el.innerHTML = `<div class="ai-label">🤖 MathMind Tutor</div><div class="msg-body">${renderMarkdown(text)}</div>`;
+  } else {
+    el.textContent = text;
+  }
+  document.getElementById('chatMsgs').appendChild(el);
+  scrollChat();
+}
+
+function scrollChat() {
+  const c = document.getElementById('chatMsgs');
+  c.scrollTop = c.scrollHeight;
+}
+
+// ═══════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════
+function buildProgress() {
+  const p = state.progress;
+  document.getElementById('pStatAvg').textContent = p.avgScore + '%';
+
+  document.getElementById('skillsBreakdown').innerHTML = p.skills.map(s => `
+    <div class="skill-row">
+      <div class="skill-name">${s.name}</div>
+      <div class="skill-bar"><div class="prog-track"><div class="prog-fill" style="width:${s.pct}%;background:${s.pct>=80?'var(--green)':s.pct>=60?'var(--warn)':'var(--red)'}"></div></div></div>
+      <div class="skill-pct">${s.pct}%</div>
+    </div>
+  `).join('');
+
+  document.getElementById('recentActivity').innerHTML = p.quizHistory.slice(0,5).map(q => `
+    <div class="skill-row">
+      <div class="skill-name" style="font-size:13px">${q.topic}</div>
+      <div style="font-size:11px;color:var(--muted)">${q.date}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:${q.score/q.total>=.8?'var(--green)':q.score/q.total>=.6?'var(--warn)':'var(--red)'}">${q.score}/${q.total}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('standardsProgress').innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:10px">` +
+    p.standards.map(s => `
+      <div style="flex:1;min-width:200px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span class="std-tag">${s.code}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:${s.pct>=80?'var(--green)':s.pct>=60?'var(--warn)':'var(--red)'}">${s.pct}%</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${s.desc}</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${s.pct}%;background:${s.pct>=80?'var(--green)':s.pct>=60?'var(--warn)':'var(--red)'}"></div></div>
+      </div>
+    `).join('') + `</div>`;
+}
+
+// ═══════════════════════════════════════════
+// GRADER
+// ═══════════════════════════════════════════
+document.querySelectorAll('.rtag').forEach(t => t.addEventListener('click', () => t.classList.toggle('sel')));
+
+function previewGraderImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('grPreview').src = ev.target.result;
+    document.getElementById('grPreview').style.display = 'block';
+    state.graderImg = ev.target.result.split(',')[1];
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runGrader() {
+  const work = document.getElementById('grWork').value.trim();
+  if (!work && !state.graderImg) { showToast('Please enter student work or upload a photo'); return; }
+  const grade = document.getElementById('grGrade').value;
+  const framework = document.getElementById('grFramework').value;
+  const domain = document.getElementById('grDomain').value;
+  const points = document.getElementById('grPoints').value;
+  const standard = document.getElementById('grStandard').value;
+  const focus = [...document.querySelectorAll('.rtag.sel')].map(t => t.dataset.v).join(', ');
+  const key = document.getElementById('grKey').value.trim();
+
+  document.getElementById('graderForm').style.display = 'none';
+  document.getElementById('graderLoading').style.display = 'block';
+
+  const prompt = `Grade this Grade ${grade} math ${domain} assignment (${framework}) worth ${points} points.
+Focus areas: ${focus}
+${standard ? `Standard: ${standard}` : ''}
+${work ? `Student work:\n${work}` : '(See attached image)'}
+${key ? `Answer key:\n${key}` : ''}
+
+Respond ONLY with valid JSON (no markdown):
+{
+  "score": <number>,
+  "total": ${points},
+  "percentage": <0-100>,
+  "level": "<1|2|3|4>",
+  "iReady": "<level description>",
+  "met": ["NY-X.X.X"],
+  "notMet": ["NY-X.X.X"],
+  "eureka": "<module/lesson connection>",
+  "strengths": "<paragraph>",
+  "errors": "<paragraph or 'None'>",
+  "misconceptions": "<paragraph or 'None'>",
+  "nextSteps": "<paragraph>",
+  "parentNote": "<plain language note>",
+  "detail": "<problem by problem if possible>"
+}`;
+
+  try {
+    const content = [];
+    if (state.graderImg) content.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:state.graderImg }});
+    content.push({ type:'text', text: prompt });
+
+    const response = await fetch(CLAUDE_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{ role:'user', content }] })
+    });
+    const data = await response.json();
+    const raw = data.content?.map(c=>c.text||'').join('');
+    const match = raw.replace(/```json\n?/g,'').replace(/```/g,'').trim().match(/\{[\s\S]*\}/);
+    const r = JSON.parse(match[0]);
+    showGraderResults(r, grade);
+  } catch(e) {
+    document.getElementById('graderLoading').style.display = 'none';
+    document.getElementById('graderForm').style.display = 'block';
+    showToast('Error grading. Please try again.');
+  }
+}
+
+function showGraderResults(r, grade) {
+  document.getElementById('graderLoading').style.display = 'none';
+  document.getElementById('graderResults').style.display = 'block';
+  const pct = r.percentage || Math.round((r.score/r.total)*100);
+  const c = pct >= 80 ? 'var(--green)' : pct >= 65 ? 'var(--warn)' : 'var(--red)';
+  const lc = {'4':'var(--green)','3':'var(--mint)','2':'var(--warn)','1':'var(--red)'}[r.level] || 'var(--warn)';
+  document.getElementById('gradeScoreRow').innerHTML = `
+    <div class="stat"><div class="stat-num" style="color:${c}">${r.score}/${r.total}</div><div class="stat-lbl">Score</div></div>
+    <div class="stat"><div class="stat-num" style="color:${c}">${pct}%</div><div class="stat-lbl">Percentage</div></div>
+    <div class="stat"><div class="stat-num" style="color:${lc}">Level ${r.level}</div><div class="stat-lbl">NY Proficiency</div></div>
+    <div class="stat"><div class="stat-num" style="font-size:14px;color:var(--purple)">${r.iReady||'—'}</div><div class="stat-lbl">i-Ready Level</div></div>
+  `;
+  const metTags = (r.met||[]).map(s=>`<span class="std-tag met">${s}</span>`).join('');
+  const notMetTags = (r.notMet||[]).map(s=>`<span class="std-tag notmet">${s}</span>`).join('');
+  document.getElementById('gradeResultBody').innerHTML = `
+    <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px">📋 Grading Report — Grade ${grade}</h3>
+    ${metTags||notMetTags ? `<div style="margin-bottom:14px">${metTags?`<div style="margin-bottom:6px"><strong style="font-size:12px;color:var(--green)">✓ STANDARDS MET</strong><br>${metTags}</div>`:''}${notMetTags?`<div><strong style="font-size:12px;color:var(--red)">✗ NEEDS WORK</strong><br>${notMetTags}</div>`:''}</div>` : ''}
+    ${r.eureka ? `<div style="background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--purple)">📘 Eureka Math: ${r.eureka}</div>` : ''}
+    <div style="margin-bottom:12px"><strong>✅ Strengths:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.strengths}</span></div>
+    ${r.errors && r.errors!=='None' ? `<div style="margin-bottom:12px"><strong>⚠️ Errors:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.errors}</span></div>` : ''}
+    ${r.misconceptions && r.misconceptions!=='None' ? `<div style="margin-bottom:12px"><strong>🧩 Misconceptions:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.misconceptions}</span></div>` : ''}
+    ${r.detail ? `<div style="margin-bottom:12px"><strong>📝 Problem-by-Problem:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.detail}</span></div>` : ''}
+    <div style="margin-bottom:12px"><strong>🎯 Next Steps:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.nextSteps}</span></div>
+    ${r.parentNote ? `<div style="background:rgba(110,231,183,.06);border:1px solid rgba(110,231,183,.2);border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6"><strong style="color:var(--green)">👨‍👩‍👧 Parent Note:</strong><br>${r.parentNote}</div>` : ''}
+  `;
+}
+
+function resetGrader() {
+  document.getElementById('graderResults').style.display = 'none';
+  document.getElementById('graderForm').style.display = 'block';
+  document.getElementById('grPreview').style.display = 'none';
+  state.graderImg = null;
+}
+
+// ═══════════════════════════════════════════
+// CLASSES
+// ═══════════════════════════════════════════
+function buildClasses() {
+  const classes = [
+    { name:'Room 304 — Math', students:24, grade:4, avg:76 },
+    { name:'Room 304 — Remediation', students:8, grade:3, avg:62 },
+    { name:'After-School Math', students:15, grade:'3-4', avg:71 },
+  ];
+  document.getElementById('classCards').innerHTML = classes.map(c => `
+    <div class="card" style="cursor:pointer" onclick="showToast('Class details coming soon!')">
+      <div class="lesson-icon">🏫</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:6px">${c.name}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Grade ${c.grade} · ${c.students} students</div>
+      <div class="prog-track"><div class="prog-fill" style="width:${c.avg}%;background:${c.avg>=75?'var(--green)':'var(--warn)'}"></div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Class avg: ${c.avg}%</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+// CLAUDE API HELPERS
+// ═══════════════════════════════════════════
+const CLAUDE_ENDPOINT = '/.netlify/functions/claude';
+
+async function callClaude(prompt, system) {
+  const res = await fetch(CLAUDE_ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1000,
+      system,
+      messages:[{ role:'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content?.map(c=>c.text||'').join('') || '';
+}
+
+async function callClaudeMessages(messages, system) {
+  const res = await fetch(CLAUDE_ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system, messages })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content?.map(c=>c.text||'').join('') || '';
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+// Init with default login shown
+document.getElementById('loginGrade').value = '4';
+</script>
+</body>
+</html>
