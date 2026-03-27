@@ -1082,13 +1082,28 @@ Respond ONLY with valid JSON array, no markdown:
   document.getElementById('nextBtn').style.display = 'none';
 
   try {
-    const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only.');
-    const cleaned = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
-    const match = cleaned.match(/\[[\s\S]*\]/);
-    state.quizQuestions = JSON.parse(match ? match[0] : cleaned);
+    const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only. No markdown, no explanation, just the JSON array.');
+    // Strip any markdown formatting the AI might add
+    const cleaned = raw
+      .replace(/```json\n?/gi,'').replace(/```\n?/g,'')
+      .replace(/^[^[]*(\[)/,'$1')  // strip anything before first [
+      .replace(/\][^]]*$/,']')     // strip anything after last ]
+      .trim();
+    const parsed = JSON.parse(cleaned);
+    // Normalize: correct field may be a letter ("B") or index (1)
+    state.quizQuestions = parsed.map(q => {
+      let c = q.correct;
+      if (typeof c === 'string') {
+        const letter = c.trim().toUpperCase();
+        c = ['A','B','C','D'].indexOf(letter);
+        if (c === -1) c = 0;
+      }
+      return { ...q, correct: c };
+    });
     renderQuestion();
   } catch(e) {
-    document.getElementById('questionArea').innerHTML = `<p style="color:var(--red);text-align:center;padding:40px">Failed to generate quiz. Please try again.</p>`;
+    console.error('Quiz parse error:', e);
+    document.getElementById('questionArea').innerHTML = `<p style="color:var(--red);text-align:center;padding:40px">Failed to generate quiz. Please try again! 🔄</p>`;
     document.getElementById('quizSetup').style.display = 'block';
     document.getElementById('quizActive').style.display = 'none';
   }
@@ -1146,8 +1161,8 @@ async function submitAnswer() {
   const fb = document.getElementById('feedbackBox');
   fb.className = 'feedback-box visible ' + (correct ? 'correct' : 'wrong');
   fb.innerHTML = correct
-    ? `✅ <strong>Correct!</strong> ${q.explanation}`
-    : `❌ <strong>Incorrect.</strong> The correct answer was <strong>${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}</strong>.<br>${q.explanation}`;
+    ? `✅ <strong>Correct!</strong> ${renderMarkdown(q.explanation)}`
+    : `❌ <strong>Not quite!</strong> The correct answer was <strong>${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}</strong>${q.explanation ? '<br>' + renderMarkdown(q.explanation) : ''}`;
 
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('nextBtn').style.display = 'inline-flex';
@@ -1159,21 +1174,38 @@ async function submitAnswer() {
   selectedOpt = null;
 }
 
+function gradeVoice(grade) {
+  const g = grade === 'K' ? 0 : parseInt(grade) || 4;
+  if (g <= 1) return 'Use very short sentences. Simple words only. Like you are talking to a 6-year-old. Use lots of encouragement and fun emojis. Max 2 steps.';
+  if (g <= 3) return 'Use short, simple sentences. Avoid big math words — explain them if you use them. Be warm and fun. Use emojis. Max 3 steps.';
+  if (g <= 5) return 'Use clear, friendly language. You can use grade-level math vocabulary but explain it simply. Encouraging tone. 3-4 steps.';
+  if (g <= 8) return 'Use proper math vocabulary. Be clear and concise. Encouraging but not babyish. 3-4 steps.';
+  return 'Use precise math language. Be concise and direct. Show the method clearly. 4-5 steps.';
+}
+
 async function showTutorExplanation(q, wrongIdx) {
   document.getElementById('tutorBox').classList.add('visible');
   document.getElementById('tutorText').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div>';
-  const prompt = `A Grade ${state.user.grade} student got this wrong:
-Question: ${q.question}
-They answered: ${q.options[wrongIdx]}
-Correct answer: ${q.options[q.correct]}
-Standard: ${q.standard}
 
-Give a warm, encouraging 2-3 step explanation of how to get the right answer. Use the Eureka Math approach. Keep it simple and kid-friendly. No more than 100 words.`;
+  const voice = gradeVoice(state.user.grade);
+  const gradeLabel = state.user.grade === 'K' ? 'Kindergarten' : `Grade ${state.user.grade}`;
+
+  const prompt = `A ${gradeLabel} student got this math question wrong.
+
+Question: ${q.question}
+They chose: ${q.options[wrongIdx]}
+Right answer: ${q.options[q.correct]}
+NY Standard: ${q.standard}
+
+Explain step-by-step how to get the right answer using the Eureka Math approach.
+Voice/style rules: ${voice}
+Use **bold** for key steps. Keep it under 120 words. Be encouraging — mistakes help us learn!`;
+
   try {
-    const res = await callClaude(prompt, 'You are a warm, encouraging NYC math tutor who specializes in Eureka Math and i-Ready.');
-    document.getElementById('tutorText').innerHTML = res;
+    const res = await callClaude(prompt, `You are a warm NYC math tutor teaching a ${state.user.grade === 'K' ? 'Kindergarten' : `Grade ${state.user.grade}`} student. You know Eureka Math and i-Ready deeply. Always match your language to the student's grade level.`);
+    document.getElementById('tutorText').innerHTML = renderMarkdown(res);
   } catch(e) {
-    document.getElementById('tutorText').innerHTML = q.explanation;
+    document.getElementById('tutorText').innerHTML = renderMarkdown(q.explanation);
   }
 }
 
@@ -1268,7 +1300,13 @@ async function sendChat() {
   scrollChat();
 
   try {
-    const sys = `You are MathMind, a warm and encouraging NYC math tutor for a Grade ${state.user.grade} student. You know the NYC Next Generation Learning Standards, i-Ready Math curriculum, and Eureka Math modules deeply. When explaining math:
+    const gradeLabel = state.user.grade === 'K' ? 'Kindergarten' : `Grade ${state.user.grade}`;
+    const voice = gradeVoice(state.user.grade);
+    const sys = `You are MathMind, a warm and encouraging NYC math tutor for a ${gradeLabel} student named ${state.user.name}. You know the NYC Next Generation Learning Standards, i-Ready Math curriculum, and Eureka Math modules deeply.
+
+IMPORTANT — always match your language to this student's level: ${voice}
+
+When explaining math:
 - Always reference the relevant NY standard code
 - Use Eureka Math strategies and vocabulary when appropriate
 - Break problems into clear numbered steps
