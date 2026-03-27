@@ -1083,13 +1083,11 @@ Respond ONLY with valid JSON array, no markdown:
 
   try {
     const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only. No markdown, no explanation, just the JSON array.', 3000);
-    // Strip any markdown formatting the AI might add
-    const cleaned = raw
-      .replace(/```json\n?/gi,'').replace(/```\n?/g,'')
-      .replace(/^[^[]*(\[)/,'$1')  // strip anything before first [
-      .replace(/\][^]]*$/,']')     // strip anything after last ]
-      .trim();
-    const parsed = JSON.parse(cleaned);
+    // Strip markdown fences, then extract the JSON array
+    const stripped = raw.replace(/```json\n?/gi,'').replace(/```\n?/g,'').trim();
+    const match = stripped.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('No JSON array found in response');
+    const parsed = JSON.parse(match[0]);
     // Normalize: correct field may be a letter ("B") or index (1)
     state.quizQuestions = parsed.map(q => {
       let c = q.correct;
