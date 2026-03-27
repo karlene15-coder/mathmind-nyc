@@ -1082,7 +1082,7 @@ Respond ONLY with valid JSON array, no markdown:
   document.getElementById('nextBtn').style.display = 'none';
 
   try {
-    const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only. No markdown, no explanation, just the JSON array.');
+    const raw = await callClaude(prompt, 'You are a NYC math curriculum expert. Always respond with pure JSON only. No markdown, no explanation, just the JSON array.', 3000);
     // Strip any markdown formatting the AI might add
     const cleaned = raw
       .replace(/```json\n?/gi,'').replace(/```\n?/g,'')
@@ -1516,13 +1516,13 @@ function buildClasses() {
 // ═══════════════════════════════════════════
 const CLAUDE_ENDPOINT = '/.netlify/functions/claude';
 
-async function callClaude(prompt, system) {
+async function callClaude(prompt, system, maxTokens = 1200) {
   const res = await fetch(CLAUDE_ENDPOINT, {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       model:'claude-sonnet-4-6',
-      max_tokens:1000,
+      max_tokens: maxTokens,
       system,
       messages:[{ role:'user', content: prompt }]
     })
@@ -1536,7 +1536,7 @@ async function callClaudeMessages(messages, system) {
   const res = await fetch(CLAUDE_ENDPOINT, {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system, messages })
+    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1200, system, messages })
   });
   const data = await res.json();
   if (data.error) throw new Error(data.error.message);
