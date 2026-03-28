@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1A1A2E">
+<link rel="manifest" href="/manifest.json">
 <title>MathMind NYC — Learn, Practice & Grow</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -204,8 +206,15 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
   .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
   .view{padding:20px 16px}
-  .g3,.g4{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr}
+  .g4{grid-template-columns:1fr 1fr}
   .g2{grid-template-columns:1fr}
+  /* iOS Safari chat height fix */
+  .chat-wrap{height:calc(100dvh - 120px)}
+  /* Word break for long answer options */
+  .opt{word-break:break-word}
+  /* Trial banner on mobile */
+  .trial-banner{margin:12px 16px 0;flex-wrap:wrap}
 }
 
 /* ── ANIMATIONS ── */
@@ -226,6 +235,35 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
 .rtag{display:inline-block;padding:5px 12px;border-radius:7px;border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;margin:3px;transition:all .15s}
 .rtag.sel{border-color:var(--mint);color:var(--mint);background:rgba(78,205,196,.08)}
 .rtag:hover{border-color:var(--sun);color:var(--sun)}
+
+/* ── LICENSING ── */
+.trial-banner{background:rgba(253,185,125,.1);border:1px solid rgba(253,185,125,.35);border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;font-size:13px;color:var(--orange)}
+.trial-banner strong{font-weight:800}
+.trial-banner .dismiss{cursor:pointer;color:var(--muted);font-size:16px;line-height:1;flex-shrink:0}
+.license-tier-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:8px;position:relative;transition:border-color .15s}
+.license-tier-card.featured{border-color:var(--sun)}
+.license-tier-card .tier-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--sun);color:#1a1a2e;font-size:10px;font-weight:900;padding:3px 12px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+.tier-price{font-family:'Fraunces',serif;font-size:36px;font-weight:900;line-height:1;color:var(--text)}
+.tier-price span{font-size:14px;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:600}
+.tier-feature{font-size:13px;color:var(--muted);padding:3px 0;display:flex;align-items:center;gap:7px}
+.tier-feature::before{content:'✓';color:var(--green);font-weight:900;flex-shrink:0}
+.usage-meter{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.usage-meter-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.upgrade-badge{background:rgba(255,217,61,.15);color:var(--sun);border:1px solid rgba(255,217,61,.3);border-radius:6px;font-size:10px;font-weight:900;padding:2px 8px;letter-spacing:.5px}
+
+/* ── CLASS MANAGEMENT ── */
+.class-code-display{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;background:var(--navy2);border:2px dashed var(--mint);border-radius:10px;padding:10px 18px;text-align:center;cursor:pointer;color:var(--mint);letter-spacing:3px;transition:all .15s}
+.class-code-display:hover{background:rgba(78,205,196,.08)}
+.student-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.student-row:last-child{border-bottom:none}
+.student-avatar{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#000;flex-shrink:0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:440px}
+.modal-title{font-family:'Fraunces',serif;font-size:20px;font-weight:900;margin-bottom:20px}
+.class-detail-overlay{position:fixed;inset:0;background:var(--navy);z-index:150;overflow-y:auto;padding:32px 36px}
+
+/* ── ENVISION TAG ── */
+.envision-tag{display:inline-block;font-size:10px;padding:3px 9px;border-radius:5px;font-weight:700;letter-spacing:.5px;background:rgba(253,185,125,.15);color:var(--orange);border:1px solid rgba(253,185,125,.3);margin:2px}
 
 /* ── MARKDOWN RENDERER ── */
 .md-h2{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--sun);margin:22px 0 10px;line-height:1.2}
@@ -253,7 +291,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">Math<span>Mind</span></div>
-    <div class="login-sub">NYC Standards · i-Ready · Eureka Math · K–12</div>
+    <div class="login-sub">NYC Standards · i-Ready · enVision Math 2020 · K–12</div>
     <div class="role-pills">
       <div class="role-pill active" onclick="setRole(this,'student')" data-role="student">🎒 Student</div>
       <div class="role-pill" onclick="setRole(this,'teacher')" data-role="teacher">🍎 Teacher</div>
@@ -302,6 +340,8 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
     <div class="nav-item teacher-only" onclick="nav('grader')" id="nav-grader" style="display:none"><span class="icon">✅</span>Grade Papers<span class="badge-count" id="gradeBadge">3</span></div>
     <div class="nav-item teacher-only" onclick="nav('classes')" id="nav-classes" style="display:none"><span class="icon">👥</span>My Classes</div>
 
+    <div class="nav-item" onclick="nav('license')" id="nav-license"><span class="icon">💎</span>Upgrade<span class="upgrade-badge" id="trialBadgeNav" style="margin-left:auto">TRIAL</span></div>
+
     <div class="nav-spacer"></div>
     <div class="user-chip" id="userChip">
       <div class="avatar" id="userAvatar" style="background:var(--sun)">A</div>
@@ -314,6 +354,15 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
 
   <!-- CONTENT -->
   <div class="content">
+
+    <!-- ── TRIAL BANNER ── -->
+    <div id="trialBanner" class="trial-banner" style="display:none;margin:16px 36px 0">
+      <span>⏳ <strong>Free Trial</strong> — <span id="trialDaysText">14 days left</span>. Upgrade for unlimited classes &amp; grading.</span>
+      <span style="display:flex;align-items:center;gap:10px">
+        <button class="btn btn-sun btn-sm" onclick="nav('license')">Upgrade Now</button>
+        <span class="dismiss" onclick="document.getElementById('trialBanner').style.display='none'" title="Dismiss">✕</span>
+      </span>
+    </div>
 
     <!-- ═══ DASHBOARD ═══ -->
     <div class="view active" id="view-dashboard">
@@ -382,7 +431,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <div id="quizSetup">
         <div class="page-header">
           <div class="page-title">⚡ Practice Quiz</div>
-          <div class="page-sub">AI-generated questions aligned to your grade & NYC standards</div>
+          <div class="page-sub">AI-generated questions aligned to NYC standards & enVision Math 2020</div>
         </div>
         <div class="g2">
           <div class="card">
@@ -390,11 +439,6 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
             <div class="form-group">
               <label>Topic / Domain</label>
               <select id="quizDomain">
-                <option value="Operations & Algebraic Thinking">Operations & Algebraic Thinking</option>
-                <option value="Number & Operations in Base Ten">Number & Operations in Base Ten</option>
-                <option value="Number & Operations — Fractions">Fractions</option>
-                <option value="Measurement & Data">Measurement & Data</option>
-                <option value="Geometry">Geometry</option>
                 <option value="Mixed Review">Mixed Review</option>
               </select>
             </div>
@@ -477,7 +521,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
     <div class="view" id="view-tutor">
       <div class="page-header">
         <div class="page-title">🤖 AI Tutor</div>
-        <div class="page-sub">Ask anything — I explain using NYC standards & Eureka Math methods</div>
+        <div class="page-sub">Ask anything — I explain using NYC standards & enVision Math 2020 methods</div>
       </div>
       <div class="chat-wrap">
         <div class="chat-msgs" id="chatMsgs">
@@ -532,7 +576,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
     <div class="view" id="view-grader">
       <div class="page-header">
         <div class="page-title">✅ Grade Papers</div>
-        <div class="page-sub">AI-powered grading aligned to NYC standards, i-Ready & Eureka Math</div>
+        <div class="page-sub">AI-powered grading aligned to NYC standards, i-Ready & enVision Math 2020</div>
       </div>
 
       <div id="graderForm">
@@ -552,7 +596,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
                 <label>Framework</label>
                 <select id="grFramework">
                   <option>NY State + i-Ready</option>
-                  <option>NY State + Eureka Math</option>
+                  <option>NY State + enVision Math 2020</option>
                   <option>All Frameworks</option>
                 </select>
               </div>
@@ -635,12 +679,176 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <div class="g3" id="classCards"></div>
     </div>
 
+    <!-- ═══ LICENSE / UPGRADE ═══ -->
+    <div class="view" id="view-license">
+      <div class="page-header">
+        <div class="page-title">💎 Plans &amp; Pricing</div>
+        <div class="page-sub">Choose the right plan for your classroom</div>
+      </div>
+
+      <!-- Current plan status -->
+      <div class="card" style="margin-bottom:20px" id="currentPlanCard"></div>
+
+      <!-- 3-tier plan cards -->
+      <div class="g3" style="margin-bottom:24px">
+        <!-- Free Trial -->
+        <div class="license-tier-card">
+          <div style="font-size:22px;font-weight:900;margin-bottom:2px">Free Trial</div>
+          <div class="tier-price">$0 <span>/ 14 days</span></div>
+          <hr class="divider">
+          <div class="tier-feature">1 class</div>
+          <div class="tier-feature">5 grader uses</div>
+          <div class="tier-feature">Full AI Tutor access</div>
+          <div class="tier-feature">All quiz features</div>
+          <div class="tier-feature" style="color:var(--muted);text-decoration:line-through">Priority support</div>
+          <button class="btn btn-ghost" style="margin-top:auto;width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+        <!-- Teacher -->
+        <div class="license-tier-card featured">
+          <div class="tier-badge">⭐ MOST POPULAR</div>
+          <div style="font-size:22px;font-weight:900;margin-bottom:2px">Teacher</div>
+          <div class="tier-price">$12 <span>/ month</span></div>
+          <hr class="divider">
+          <div class="tier-feature">Unlimited classes</div>
+          <div class="tier-feature">Unlimited grader uses</div>
+          <div class="tier-feature">Full AI Tutor access</div>
+          <div class="tier-feature">All quiz features</div>
+          <div class="tier-feature">Priority email support</div>
+          <button class="btn btn-sun" style="margin-top:auto;width:100%;justify-content:center" onclick="showToast('Billing coming soon! Email us: hello@mathmind.app')">Get Started →</button>
+        </div>
+        <!-- School -->
+        <div class="license-tier-card">
+          <div style="font-size:22px;font-weight:900;margin-bottom:2px">School License</div>
+          <div class="tier-price" style="font-size:20px">Contact Us</div>
+          <hr class="divider">
+          <div class="tier-feature">Unlimited teachers</div>
+          <div class="tier-feature">School-wide analytics</div>
+          <div class="tier-feature">Custom curriculum alignment</div>
+          <div class="tier-feature">Dedicated support</div>
+          <div class="tier-feature">PD &amp; onboarding</div>
+          <button class="btn btn-mint" style="margin-top:auto;width:100%;justify-content:center" onclick="openSchoolInquiryModal()">Get a Quote →</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /app -->
+
+<!-- School Inquiry Modal -->
+<div id="schoolInquiryModal" style="display:none" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">🏫 School License Inquiry</div>
+    <div class="form-group"><label>Your Name</label><input type="text" id="siName" placeholder="Jane Smith" /></div>
+    <div class="form-group"><label>School Name</label><input type="text" id="siSchool" placeholder="PS 304" /></div>
+    <div class="form-group"><label>Email</label><input type="email" id="siEmail" placeholder="jane@school.edu" /></div>
+    <div class="form-group"><label>Number of Students</label>
+      <select id="siStudents">
+        <option>Under 100</option><option>100–300</option><option>300–600</option><option>600+</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn btn-sun" style="flex:1;justify-content:center" onclick="submitSchoolInquiry()">Submit Inquiry</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeSchoolInquiryModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══════════════════════════════════════════
+// ENVISION MATH 2020 CURRICULUM
+// ═══════════════════════════════════════════
+const ENVISION_TOPICS = {
+  'K': ['Counting and Comparing Numbers 0-5','Counting and Comparing Numbers 6-10','Numbers 11-20','Comparing Objects by Size','Geometry: Identify & Describe Shapes','More and Less'],
+  '1': ['Addition Concepts','Subtraction Concepts','More Addition & Subtraction','Place Value: Tens and Ones','Counting and Comparing Numbers to 120','Adding with Tens and Ones'],
+  '2': ['Fluently Add & Subtract Within 20','Work with Equal Groups','Place Value: Numbers to 1,000','Add Within 1,000','Subtract Within 1,000','Measurement, Time, and Data'],
+  '3': ['Understand Multiplication & Division','Multiplication Facts: Use Patterns','Multiplication Facts: Use Strategies','Use Multiplication to Divide','Fluently Multiply & Divide','Connect Area to Multiplication'],
+  '4': ['Generalize Place Value Understanding','Fluently Add & Subtract Multi-Digit Numbers','Multiply by 1-Digit Numbers','Multiply by 2-Digit Numbers','Divide by 1-Digit Divisors','Fraction Equivalence & Comparison'],
+  '5': ['Understand Place Value','Use Models & Strategies to Add & Subtract Decimals','Multiply Multi-Digit Whole Numbers','Use Models & Strategies to Multiply Decimals','Use Models & Strategies to Divide Whole Numbers','Use Equivalent Fractions to Add & Subtract'],
+  '6': ['Use Positive Rational Numbers','Integers & Rational Numbers','Numeric & Algebraic Expressions','Represent & Solve Equations & Inequalities','Understand & Use Ratio & Rate','Understand & Use Percent'],
+  '7': ['Rational Number Operations','Analyze & Use Proportional Relationships','Numeric & Algebraic Expressions & Equations','Represent & Solve Equations & Inequalities','Angles, Triangles, & Transversals','Circles & Area'],
+  '8': ['Real Numbers','Analyze & Solve Linear Equations','Use Functions to Model Relationships','Investigate Bivariate Data','Understand & Apply the Pythagorean Theorem','Solve Problems Involving Surface Area & Volume'],
+};
+
+const LESSONS_BY_GRADE = {
+  'K': [
+    { id:1, title:'Count Objects to 5', tag:'new', icon:'✋', domain:'Counting and Comparing Numbers 0-5', std:'NY-K.CC.1', mins:10, done:false, envisionTopic:'Counting and Comparing Numbers 0-5', envisionLesson:'1-1' },
+    { id:2, title:'Write Numbers 0-5', tag:'new', icon:'✏️', domain:'Counting and Comparing Numbers 0-5', std:'NY-K.CC.3', mins:10, done:false, envisionTopic:'Counting and Comparing Numbers 0-5', envisionLesson:'1-3' },
+    { id:3, title:'Count Objects to 10', tag:'new', icon:'🔢', domain:'Counting and Comparing Numbers 6-10', std:'NY-K.CC.5', mins:10, done:false, envisionTopic:'Counting and Comparing Numbers 6-10', envisionLesson:'2-1' },
+    { id:4, title:'Compare Groups: More & Fewer', tag:'review', icon:'⚖️', domain:'More and Less', std:'NY-K.CC.6', mins:12, done:false, envisionTopic:'More and Less', envisionLesson:'6-1' },
+    { id:5, title:'Understand Addition', tag:'new', icon:'➕', domain:'Counting and Comparing Numbers 6-10', std:'NY-K.OA.1', mins:12, done:false, envisionTopic:'Counting and Comparing Numbers 6-10', envisionLesson:'2-5' },
+    { id:6, title:'Identify 2D Shapes', tag:'review', icon:'🔷', domain:'Geometry: Identify & Describe Shapes', std:'NY-K.G.2', mins:10, done:true, envisionTopic:'Geometry: Identify & Describe Shapes', envisionLesson:'5-1' },
+  ],
+  '1': [
+    { id:1, title:'Add Within 10', tag:'new', icon:'➕', domain:'Addition Concepts', std:'NY-1.OA.1', mins:12, done:false, envisionTopic:'Addition Concepts', envisionLesson:'1-1' },
+    { id:2, title:'Subtract Within 10', tag:'new', icon:'➖', domain:'Subtraction Concepts', std:'NY-1.OA.2', mins:12, done:false, envisionTopic:'Subtraction Concepts', envisionLesson:'2-1' },
+    { id:3, title:'Fact Families', tag:'review', icon:'👨‍👩‍👧', domain:'More Addition & Subtraction', std:'NY-1.OA.3', mins:10, done:false, envisionTopic:'More Addition & Subtraction', envisionLesson:'3-3' },
+    { id:4, title:'Tens and Ones', tag:'new', icon:'🏗️', domain:'Place Value: Tens and Ones', std:'NY-1.NBT.2', mins:14, done:false, envisionTopic:'Place Value: Tens and Ones', envisionLesson:'4-1' },
+    { id:5, title:'Compare Numbers to 100', tag:'review', icon:'📊', domain:'Counting and Comparing Numbers to 120', std:'NY-1.NBT.3', mins:10, done:true, envisionTopic:'Counting and Comparing Numbers to 120', envisionLesson:'5-2' },
+    { id:6, title:'Add Tens', tag:'locked', icon:'🔟', domain:'Adding with Tens and Ones', std:'NY-1.NBT.4', mins:12, done:false, envisionTopic:'Adding with Tens and Ones', envisionLesson:'6-1' },
+  ],
+  '2': [
+    { id:1, title:'Add Within 20 Fluently', tag:'new', icon:'⚡', domain:'Fluently Add & Subtract Within 20', std:'NY-2.OA.2', mins:12, done:false, envisionTopic:'Fluently Add & Subtract Within 20', envisionLesson:'1-1' },
+    { id:2, title:'Equal Groups & Arrays', tag:'new', icon:'🔲', domain:'Work with Equal Groups', std:'NY-2.OA.3', mins:14, done:false, envisionTopic:'Work with Equal Groups', envisionLesson:'2-1' },
+    { id:3, title:'Place Value to 1,000', tag:'review', icon:'🏛️', domain:'Place Value: Numbers to 1,000', std:'NY-2.NBT.1', mins:12, done:false, envisionTopic:'Place Value: Numbers to 1,000', envisionLesson:'3-1' },
+    { id:4, title:'Add 3-Digit Numbers', tag:'new', icon:'➕', domain:'Add Within 1,000', std:'NY-2.NBT.7', mins:15, done:false, envisionTopic:'Add Within 1,000', envisionLesson:'4-2' },
+    { id:5, title:'Subtract 3-Digit Numbers', tag:'review', icon:'➖', domain:'Subtract Within 1,000', std:'NY-2.NBT.7', mins:15, done:true, envisionTopic:'Subtract Within 1,000', envisionLesson:'5-2' },
+    { id:6, title:'Tell & Write Time', tag:'locked', icon:'🕐', domain:'Measurement, Time, and Data', std:'NY-2.MD.7', mins:10, done:false, envisionTopic:'Measurement, Time, and Data', envisionLesson:'6-4' },
+  ],
+  '3': [
+    { id:1, title:'Understand Multiplication', tag:'new', icon:'✖️', domain:'Understand Multiplication & Division', std:'NY-3.OA.1', mins:14, done:false, envisionTopic:'Understand Multiplication & Division', envisionLesson:'1-1' },
+    { id:2, title:'Understand Division', tag:'new', icon:'➗', domain:'Understand Multiplication & Division', std:'NY-3.OA.2', mins:14, done:false, envisionTopic:'Understand Multiplication & Division', envisionLesson:'1-4' },
+    { id:3, title:'Multiply with Arrays', tag:'review', icon:'🔲', domain:'Multiplication Facts: Use Patterns', std:'NY-3.OA.3', mins:12, done:false, envisionTopic:'Multiplication Facts: Use Patterns', envisionLesson:'2-1' },
+    { id:4, title:'Area of Rectangles', tag:'new', icon:'📐', domain:'Connect Area to Multiplication', std:'NY-3.MD.7', mins:12, done:true, envisionTopic:'Connect Area to Multiplication', envisionLesson:'6-2' },
+    { id:5, title:'Fractions on a Number Line', tag:'review', icon:'📏', domain:'Multiplication Facts: Use Strategies', std:'NY-3.NF.2', mins:14, done:false, envisionTopic:'Multiplication Facts: Use Strategies', envisionLesson:'3-3' },
+    { id:6, title:'Tell Time to the Minute', tag:'locked', icon:'🕑', domain:'Multiplication Facts: Use Strategies', std:'NY-3.MD.1', mins:10, done:false, envisionTopic:'Multiplication Facts: Use Strategies', envisionLesson:'3-5' },
+  ],
+  '4': [
+    { id:1, title:'Multiply 2-Digit Numbers', tag:'new', icon:'✖️', domain:'Multiply by 1-Digit Numbers', std:'NY-4.NBT.5', mins:15, done:false, envisionTopic:'Multiply by 1-Digit Numbers', envisionLesson:'3-2' },
+    { id:2, title:'Equivalent Fractions', tag:'review', icon:'🍕', domain:'Fraction Equivalence & Comparison', std:'NY-4.NF.1', mins:12, done:false, envisionTopic:'Fraction Equivalence & Comparison', envisionLesson:'6-1' },
+    { id:3, title:'Area of Rectangles', tag:'new', icon:'📐', domain:'Fluently Add & Subtract Multi-Digit Numbers', std:'NY-4.MD.3', mins:10, done:true, envisionTopic:'Fluently Add & Subtract Multi-Digit Numbers', envisionLesson:'2-3' },
+    { id:4, title:'Compare Fractions', tag:'review', icon:'⚖️', domain:'Fraction Equivalence & Comparison', std:'NY-4.NF.2', mins:12, done:false, envisionTopic:'Fraction Equivalence & Comparison', envisionLesson:'6-3' },
+    { id:5, title:'Multi-Step Word Problems', tag:'new', icon:'📝', domain:'Generalize Place Value Understanding', std:'NY-4.OA.3', mins:18, done:false, envisionTopic:'Generalize Place Value Understanding', envisionLesson:'1-4' },
+    { id:6, title:'Place Value & Rounding', tag:'review', icon:'🔢', domain:'Generalize Place Value Understanding', std:'NY-4.NBT.3', mins:10, done:true, envisionTopic:'Generalize Place Value Understanding', envisionLesson:'1-2' },
+    { id:7, title:'Angles & Lines', tag:'locked', icon:'📏', domain:'Multiply by 2-Digit Numbers', std:'NY-4.G.1', mins:14, done:false, envisionTopic:'Multiply by 2-Digit Numbers', envisionLesson:'4-1' },
+    { id:8, title:'Decimal Notation', tag:'locked', icon:'🔣', domain:'Fraction Equivalence & Comparison', std:'NY-4.NF.6', mins:16, done:false, envisionTopic:'Fraction Equivalence & Comparison', envisionLesson:'6-5' },
+    { id:9, title:'Division Strategies', tag:'review', icon:'➗', domain:'Divide by 1-Digit Divisors', std:'NY-4.NBT.6', mins:15, done:true, envisionTopic:'Divide by 1-Digit Divisors', envisionLesson:'5-1' },
+  ],
+  '5': [
+    { id:1, title:'Multiply Decimals', tag:'new', icon:'🔣', domain:'Use Models & Strategies to Multiply Decimals', std:'NY-5.NBT.7', mins:15, done:false, envisionTopic:'Use Models & Strategies to Multiply Decimals', envisionLesson:'4-1' },
+    { id:2, title:'Divide Whole Numbers', tag:'new', icon:'➗', domain:'Use Models & Strategies to Divide Whole Numbers', std:'NY-5.NBT.6', mins:14, done:false, envisionTopic:'Use Models & Strategies to Divide Whole Numbers', envisionLesson:'5-1' },
+    { id:3, title:'Add & Subtract Fractions', tag:'review', icon:'🍕', domain:'Use Equivalent Fractions to Add & Subtract', std:'NY-5.NF.1', mins:15, done:false, envisionTopic:'Use Equivalent Fractions to Add & Subtract', envisionLesson:'6-1' },
+    { id:4, title:'Multiply Fractions', tag:'new', icon:'✖️', domain:'Use Equivalent Fractions to Add & Subtract', std:'NY-5.NF.4', mins:16, done:false, envisionTopic:'Use Equivalent Fractions to Add & Subtract', envisionLesson:'6-5' },
+    { id:5, title:'Place Value & Powers of 10', tag:'review', icon:'🔟', domain:'Understand Place Value', std:'NY-5.NBT.1', mins:12, done:true, envisionTopic:'Understand Place Value', envisionLesson:'1-1' },
+    { id:6, title:'Volume of Rectangular Prisms', tag:'locked', icon:'📦', domain:'Multiply Multi-Digit Whole Numbers', std:'NY-5.MD.5', mins:14, done:false, envisionTopic:'Multiply Multi-Digit Whole Numbers', envisionLesson:'3-4' },
+  ],
+  '6': [
+    { id:1, title:'Divide Fractions', tag:'new', icon:'➗', domain:'Use Positive Rational Numbers', std:'NY-6.NS.1', mins:15, done:false, envisionTopic:'Use Positive Rational Numbers', envisionLesson:'1-1' },
+    { id:2, title:'Understand Integers', tag:'new', icon:'📉', domain:'Integers & Rational Numbers', std:'NY-6.NS.6', mins:14, done:false, envisionTopic:'Integers & Rational Numbers', envisionLesson:'2-1' },
+    { id:3, title:'Write & Evaluate Expressions', tag:'review', icon:'📝', domain:'Numeric & Algebraic Expressions', std:'NY-6.EE.1', mins:15, done:false, envisionTopic:'Numeric & Algebraic Expressions', envisionLesson:'3-1' },
+    { id:4, title:'Solve Equations', tag:'new', icon:'⚖️', domain:'Represent & Solve Equations & Inequalities', std:'NY-6.EE.7', mins:16, done:false, envisionTopic:'Represent & Solve Equations & Inequalities', envisionLesson:'4-3' },
+    { id:5, title:'Understand Ratios', tag:'review', icon:'🔢', domain:'Understand & Use Ratio & Rate', std:'NY-6.RP.1', mins:12, done:true, envisionTopic:'Understand & Use Ratio & Rate', envisionLesson:'5-1' },
+    { id:6, title:'Understand Percent', tag:'locked', icon:'💯', domain:'Understand & Use Percent', std:'NY-6.RP.3', mins:14, done:false, envisionTopic:'Understand & Use Percent', envisionLesson:'6-1' },
+  ],
+  '7': [
+    { id:1, title:'Add & Subtract Rational Numbers', tag:'new', icon:'➕', domain:'Rational Number Operations', std:'NY-7.NS.1', mins:15, done:false, envisionTopic:'Rational Number Operations', envisionLesson:'1-1' },
+    { id:2, title:'Multiply & Divide Rational Numbers', tag:'new', icon:'✖️', domain:'Rational Number Operations', std:'NY-7.NS.2', mins:15, done:false, envisionTopic:'Rational Number Operations', envisionLesson:'1-4' },
+    { id:3, title:'Proportional Relationships', tag:'review', icon:'📈', domain:'Analyze & Use Proportional Relationships', std:'NY-7.RP.2', mins:14, done:false, envisionTopic:'Analyze & Use Proportional Relationships', envisionLesson:'2-2' },
+    { id:4, title:'Solve Linear Equations', tag:'new', icon:'⚖️', domain:'Numeric & Algebraic Expressions & Equations', std:'NY-7.EE.4', mins:16, done:false, envisionTopic:'Numeric & Algebraic Expressions & Equations', envisionLesson:'3-4' },
+    { id:5, title:'Area of Circles', tag:'review', icon:'⭕', domain:'Circles & Area', std:'NY-7.G.4', mins:14, done:true, envisionTopic:'Circles & Area', envisionLesson:'6-2' },
+    { id:6, title:'Triangle Angles', tag:'locked', icon:'🔺', domain:'Angles, Triangles, & Transversals', std:'NY-7.G.2', mins:12, done:false, envisionTopic:'Angles, Triangles, & Transversals', envisionLesson:'5-3' },
+  ],
+  '8': [
+    { id:1, title:'Irrational Numbers', tag:'new', icon:'π', domain:'Real Numbers', std:'NY-8.NS.1', mins:14, done:false, envisionTopic:'Real Numbers', envisionLesson:'1-1' },
+    { id:2, title:'Solve Linear Equations', tag:'new', icon:'⚖️', domain:'Analyze & Solve Linear Equations', std:'NY-8.EE.7', mins:16, done:false, envisionTopic:'Analyze & Solve Linear Equations', envisionLesson:'2-1' },
+    { id:3, title:'Understand Functions', tag:'review', icon:'📈', domain:'Use Functions to Model Relationships', std:'NY-8.F.1', mins:14, done:false, envisionTopic:'Use Functions to Model Relationships', envisionLesson:'3-1' },
+    { id:4, title:'Pythagorean Theorem', tag:'new', icon:'📐', domain:'Understand & Apply the Pythagorean Theorem', std:'NY-8.G.7', mins:15, done:false, envisionTopic:'Understand & Apply the Pythagorean Theorem', envisionLesson:'5-2' },
+    { id:5, title:'Scatter Plots', tag:'review', icon:'🔵', domain:'Investigate Bivariate Data', std:'NY-8.SP.1', mins:12, done:true, envisionTopic:'Investigate Bivariate Data', envisionLesson:'4-1' },
+    { id:6, title:'Volume of Cylinders', tag:'locked', icon:'🥫', domain:'Solve Problems Involving Surface Area & Volume', std:'NY-8.G.9', mins:14, done:false, envisionTopic:'Solve Problems Involving Surface Area & Volume', envisionLesson:'6-2' },
+  ],
+};
+
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
@@ -670,19 +878,30 @@ let state = {
       { code:'NY-4.MD.3', desc:'Area and perimeter', pct:82 },
     ]
   },
-  lessons: [
-    { id:1, title:'Multiply 2-Digit Numbers', tag:'new', icon:'✖️', domain:'Operations & Algebraic Thinking', std:'NY-4.NBT.5', mins:15, done:false },
-    { id:2, title:'Equivalent Fractions', tag:'review', icon:'🍕', domain:'Fractions', std:'NY-4.NF.1', mins:12, done:false },
-    { id:3, title:'Area of Rectangles', tag:'new', icon:'📐', domain:'Measurement & Data', std:'NY-4.MD.3', mins:10, done:true },
-    { id:4, title:'Compare Fractions', tag:'review', icon:'⚖️', domain:'Fractions', std:'NY-4.NF.2', mins:12, done:false },
-    { id:5, title:'Multi-Step Word Problems', tag:'new', icon:'📝', domain:'Operations & Algebraic Thinking', std:'NY-4.OA.3', mins:18, done:false },
-    { id:6, title:'Place Value & Rounding', tag:'review', icon:'🔢', domain:'Number & Operations', std:'NY-4.NBT.3', mins:10, done:true },
-    { id:7, title:'Angles & Lines', tag:'locked', icon:'📏', domain:'Geometry', std:'NY-4.G.1', mins:14, done:false },
-    { id:8, title:'Decimal Notation', tag:'locked', icon:'🔣', domain:'Number & Operations', std:'NY-4.NF.6', mins:16, done:false },
-    { id:9, title:'Division Strategies', tag:'review', icon:'➗', domain:'Operations & Algebraic Thinking', std:'NY-4.NBT.6', mins:15, done:true },
-  ],
+  lessonsByGrade: LESSONS_BY_GRADE,
+  get lessons() { return this.lessonsByGrade[this.user.grade] || this.lessonsByGrade['4']; },
   graderImg: null,
-  lastQuizWrong: []
+  lastQuizWrong: [],
+  classes: [
+    { name:'Room 304 — Math', grade:'4', code:'NYC-304', avg:76, students:[
+      {name:'Maria Lopez', grade:'4', avg:82},
+      {name:'James Chen', grade:'4', avg:71},
+      {name:'Aisha Williams', grade:'4', avg:88},
+      {name:'Tyler Brown', grade:'4', avg:65},
+    ]},
+    { name:'Room 304 — Remediation', grade:'3', code:'REM-304', avg:62, students:[
+      {name:'Sofia Garcia', grade:'3', avg:58},
+      {name:'Marcus Davis', grade:'3', avg:67},
+      {name:'Emma Wilson', grade:'3', avg:61},
+    ]},
+    { name:'After-School Math', grade:'4', code:'AFT-101', avg:71, students:[
+      {name:'Noah Martinez', grade:'4', avg:74},
+      {name:'Lily Thompson', grade:'4', avg:69},
+      {name:'Ethan Johnson', grade:'4', avg:72},
+    ]},
+  ],
+  activeClass: null,
+  license: { plan:'trial', trialDaysLeft:14, classesAllowed:1, graderLimit:5, graderUsed:0 },
 };
 
 // ═══════════════════════════════════════════
@@ -698,7 +917,18 @@ function setRole(el, role) {
 function doLogin() {
   const name = document.getElementById('loginName').value || 'User';
   const grade = document.getElementById('loginGrade').value;
+  const classCodeEl = document.querySelector('#studentFields input[type=text]');
+  const enteredCode = classCodeEl ? classCodeEl.value.trim().toUpperCase() : '';
   state.user = { name, grade, role: selectedRole };
+  // Join class if code matches
+  if (selectedRole === 'student' && enteredCode) {
+    const matched = state.classes.find(c => c.code.toUpperCase() === enteredCode);
+    if (matched) {
+      const alreadyIn = matched.students.find(s => s.name === name);
+      if (!alreadyIn) matched.students.push({ name, grade, avg: 0 });
+      state.activeClass = matched;
+    }
+  }
   document.getElementById('loginScreen').style.display = 'none';
   initApp();
 }
@@ -713,7 +943,7 @@ function initApp() {
   document.getElementById('userAvatar').textContent = u.name[0];
   document.getElementById('userAvatar').style.background = u.role === 'teacher' ? 'var(--coral)' : u.role === 'parent' ? 'var(--mint)' : 'var(--sun)';
   document.getElementById('userRoleLabel').textContent = u.role === 'student' ? `Grade ${u.grade} · Student` : u.role === 'teacher' ? 'Teacher' : 'Parent';
-  document.getElementById('dashSub').textContent = `Grade ${u.grade} · NYC Math Standards · i-Ready & Eureka Math`;
+  document.getElementById('dashSub').textContent = `Grade ${u.grade} · NYC Math Standards · i-Ready & enVision Math 2020`;
   document.getElementById('lessonsSub').textContent = `Personalized for Grade ${u.grade}`;
   document.getElementById('progressSub').textContent = `Your progress through Grade ${u.grade} NYC standards`;
 
@@ -727,6 +957,15 @@ function initApp() {
   buildLessons('recommended');
   buildClasses();
   populateRecentQuizzes();
+  populateQuizDomains(u.grade);
+  buildLicenseView();
+
+  // Trial banner
+  if (state.license.plan === 'trial') {
+    const banner = document.getElementById('trialBanner');
+    banner.style.display = 'flex';
+    document.getElementById('trialDaysText').textContent = `${state.license.trialDaysLeft} days left`;
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -742,6 +981,7 @@ function nav(page) {
   // Close sidebar on mobile after navigation
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('show');
+  if (page === 'license') buildLicenseView();
 }
 
 // ═══════════════════════════════════════════
@@ -808,6 +1048,7 @@ function buildLessons(tab) {
   let lessons = state.lessons;
   if (tab === 'recommended') lessons = lessons.filter(l => l.tag !== 'locked');
   if (tab === 'completed') lessons = lessons.filter(l => l.done);
+  if (tab === 'all') lessons = [...lessons];
   document.getElementById('lessonsGrid').style.display = 'grid';
   document.getElementById('lessonDetail').style.display = 'none';
   document.getElementById('lessonsGrid').innerHTML = lessons.map(l => `
@@ -819,6 +1060,7 @@ function buildLessons(tab) {
         <span>${l.mins} min</span>
         <span class="std-tag">${l.std}</span>
       </div>
+      ${l.envisionTopic ? `<div style="margin-top:6px"><span class="envision-tag">📘 ${l.envisionTopic}</span></div>` : ''}
       ${l.done ? `<div style="margin-top:8px;font-size:12px;color:var(--green);font-weight:700">✅ Completed</div>` : ''}
     </div>
   `).join('') || `<div style="grid-column:1/-1;color:var(--muted);text-align:center;padding:40px">No lessons in this category yet.</div>`;
@@ -831,17 +1073,21 @@ async function openLesson(id) {
   document.getElementById('lessonDetail').style.display = 'block';
   document.getElementById('lessonDetailContent').innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Loading lesson from AI...</p></div>`;
 
-  const prompt = `Create a complete, engaging math lesson for a Grade ${state.user.grade} NYC student on the topic: "${lesson.title}" (Standard: ${lesson.std}, Domain: ${lesson.domain}).
+  const lessonVoice = gradeVoiceStr(state.user.grade);
+  const envisionRef = lesson.envisionTopic ? `enVision Math 2020 Topic: ${lesson.envisionTopic}${lesson.envisionLesson ? ', Lesson ' + lesson.envisionLesson : ''}` : 'enVision Math 2020';
+  const prompt = `Create a complete, engaging math lesson for a Grade ${state.user.grade} NYC student on the topic: "${lesson.title}" (Standard: ${lesson.std}, Domain: ${lesson.domain}, ${envisionRef}).
+
+Voice/language style: ${lessonVoice}
 
 Structure it with:
-1. 🎯 Learning Goal (1 sentence, kid-friendly)
-2. 📖 Explanation (clear, step-by-step, use simple numbers as examples, reference Eureka Math approach and i-Ready vocabulary)
+1. 🎯 Learning Goal (1 sentence, age-appropriate)
+2. 📖 Explanation (clear, step-by-step, use simple numbers as examples, reference enVision Math 2020 approach and i-Ready vocabulary)
 3. ✏️ Worked Example (show 2 complete examples with all steps)
 4. 🧠 Key Vocabulary (3-5 words with simple definitions)
 5. 💡 Tips & Tricks (2-3 practical tips)
 6. 🔗 NY Standard Connection (explain how this connects to ${lesson.std})
 
-Write in a friendly, encouraging tone for a ${state.user.grade === 'K' ? 'kindergartner' : `Grade ${state.user.grade} student`}. Use emojis. Use simple markdown: ## for section headers, **bold** for key terms, - for bullet points. Do NOT use code fences or ASCII art diagrams.
+Write in an age-appropriate tone for a ${state.user.grade === 'K' ? 'kindergartner' : `Grade ${state.user.grade} student`}. Use emojis. Use simple markdown: ## for section headers, **bold** for key terms, - for bullet points. Do NOT use code fences or ASCII art diagrams.
 
 For visual models, use these special tags (they render as real shapes in the app):
 - Fraction strip: <fraction-strip n="1" d="4"/> (shows 1 out of 4 shaded)
@@ -850,7 +1096,7 @@ For visual models, use these special tags (they render as real shapes in the app
 Use these whenever a visual would help (fractions, multiplication, area, etc). Keep it under 600 words.`;
 
   try {
-    const res = await callClaude(prompt, 'You are a friendly NYC elementary/middle school math teacher who knows Eureka Math and i-Ready curricula deeply.');
+    const res = await callClaude(prompt, `You are a friendly NYC elementary/middle school math teacher who knows enVision Math 2020 and i-Ready curricula deeply. Always match language to the student's grade level.`);
     lesson.done = true;
     document.getElementById('lessonDetailContent').innerHTML = `
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
@@ -1028,6 +1274,13 @@ function closeLessonDetail() {
 // ═══════════════════════════════════════════
 // QUIZ
 // ═══════════════════════════════════════════
+function populateQuizDomains(grade) {
+  const sel = document.getElementById('quizDomain');
+  const topics = ENVISION_TOPICS[grade] || ENVISION_TOPICS['4'];
+  sel.innerHTML = topics.map(t => `<option value="${t}">${t}</option>`).join('') +
+    `<option value="Mixed Review">Mixed Review</option>`;
+}
+
 function populateRecentQuizzes() {
   document.getElementById('recentQuizzes').innerHTML = state.progress.quizHistory.map(q => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
@@ -1056,14 +1309,17 @@ async function startQuiz() {
   document.getElementById('quizActive').style.display = 'block';
   document.getElementById('quizResults').style.display = 'none';
 
-  const prompt = `Generate ${count} math quiz questions for a Grade ${state.user.grade} student on the topic "${domain}" at "${diff}" difficulty level, aligned to NYC Next Generation Learning Standards.
+  const quizVoice = gradeVoiceStr(state.user.grade);
+  const prompt = `Generate ${count} math quiz questions for a Grade ${state.user.grade} student on the topic "${domain}" at "${diff}" difficulty level, aligned to NYC Next Generation Learning Standards and enVision Math 2020.
+
+Voice/language for explanations: ${quizVoice}
 
 For each question, provide:
-- A clear math problem (can include arithmetic, word problems, or concept questions)
+- A clear math problem (can include arithmetic, word problems, or concept questions) written at Grade ${state.user.grade} reading level
 - 4 multiple choice options (A, B, C, D)
 - The correct answer letter
 - The specific NY standard code (e.g., NY-4.NBT.5)
-- A brief explanation of why the answer is correct (2-3 sentences, kid-friendly)
+- A brief explanation of why the answer is correct (2-3 sentences, written in ${quizVoice})
 
 Respond ONLY with valid JSON array, no markdown:
 [
@@ -1174,18 +1430,75 @@ async function submitAnswer() {
 
 function gradeVoice(grade) {
   const g = grade === 'K' ? 0 : parseInt(grade) || 4;
-  if (g <= 1) return 'Use very short sentences. Simple words only. Like you are talking to a 6-year-old. Use lots of encouragement and fun emojis. Max 2 steps.';
-  if (g <= 3) return 'Use short, simple sentences. Avoid big math words — explain them if you use them. Be warm and fun. Use emojis. Max 3 steps.';
-  if (g <= 5) return 'Use clear, friendly language. You can use grade-level math vocabulary but explain it simply. Encouraging tone. 3-4 steps.';
-  if (g <= 8) return 'Use proper math vocabulary. Be clear and concise. Encouraging but not babyish. 3-4 steps.';
-  return 'Use precise math language. Be concise and direct. Show the method clearly. 4-5 steps.';
+  // 7-band system: K, 1, 2-3, 4-5, 6-8, 9-10, 11-12
+  if (g === 0) return {
+    vocab: 'very simple everyday words only — no math jargon',
+    sentences: 'one idea per sentence, max 8 words each',
+    examples: true,
+    tone: 'super warm, playful, heavy emoji use, lots of praise',
+    steps: 'max 2 steps, use counting objects and pictures',
+    summary: 'Use EXTREMELY simple language for a 5-year-old kindergartner. Celebrate every small win. Use things like fingers, dots, or objects to explain. Max 2 steps.'
+  };
+  if (g === 1) return {
+    vocab: 'simple everyday words, introduce one math word at a time with a simple definition',
+    sentences: 'short sentences, max 10 words, one idea each',
+    examples: true,
+    tone: 'warm, enthusiastic, emoji-friendly, very encouraging',
+    steps: 'max 2-3 tiny steps, use concrete objects and drawings',
+    summary: 'Use very simple language for a 6-7 year old. Define any math word you use. Use objects like blocks or fingers. Max 3 steps.'
+  };
+  if (g <= 3) return {
+    vocab: 'grade-level math vocabulary with brief parenthetical definitions',
+    sentences: 'short, clear sentences; avoid complex clauses',
+    examples: true,
+    tone: 'friendly and encouraging, emoji occasionally',
+    steps: '3 clear steps, use visual models when helpful',
+    summary: 'Use short, friendly sentences for a 2nd-3rd grader. Briefly define math terms. Use pictures/diagrams. 3 clear steps.'
+  };
+  if (g <= 5) return {
+    vocab: 'standard grade 4-5 math vocabulary used naturally',
+    sentences: 'clear full sentences, moderate complexity',
+    examples: true,
+    tone: 'encouraging and supportive, light emoji use',
+    steps: '3-4 numbered steps, reference enVision Math strategies',
+    summary: 'Use grade-appropriate vocabulary for a 4th-5th grader. Be clear and encouraging. Reference enVision Math 2020 methods. 3-4 steps.'
+  };
+  if (g <= 8) return {
+    vocab: 'proper math vocabulary, introduce new terms clearly',
+    sentences: 'standard prose, concise paragraphs',
+    examples: false,
+    tone: 'supportive but not childish, peer-like',
+    steps: '3-4 steps, show algebraic thinking',
+    summary: 'Use proper math language for a middle schooler. Be clear and concise. Show algebraic reasoning. 3-4 steps. No baby talk.'
+  };
+  if (g <= 10) return {
+    vocab: 'precise math terminology expected',
+    sentences: 'formal, concise, mathematically accurate',
+    examples: false,
+    tone: 'professional and respectful, minimal emoji',
+    steps: '4-5 logical steps, show full working',
+    summary: 'Use precise mathematical language for a high school student. Show full logical steps. Reference relevant theorems/formulas. 4-5 steps.'
+  };
+  return {
+    vocab: 'advanced mathematical terminology throughout',
+    sentences: 'formal mathematical prose, rigorous',
+    examples: false,
+    tone: 'academic and direct, no emoji',
+    steps: '4-5 rigorous steps, formal proof/derivation style',
+    summary: 'Use rigorous mathematical language appropriate for 11th-12th grade or AP/pre-calculus level. Show complete derivations. 4-5 steps.'
+  };
+}
+
+function gradeVoiceStr(grade) {
+  const v = gradeVoice(grade);
+  return v.summary;
 }
 
 async function showTutorExplanation(q, wrongIdx) {
   document.getElementById('tutorBox').classList.add('visible');
   document.getElementById('tutorText').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div>';
 
-  const voice = gradeVoice(state.user.grade);
+  const voice = gradeVoiceStr(state.user.grade);
   const gradeLabel = state.user.grade === 'K' ? 'Kindergarten' : `Grade ${state.user.grade}`;
 
   const prompt = `A ${gradeLabel} student got this math question wrong.
@@ -1195,7 +1508,7 @@ They chose: ${q.options[wrongIdx]}
 Right answer: ${q.options[q.correct]}
 NY Standard: ${q.standard}
 
-Explain step-by-step how to get the right answer using the Eureka Math approach.
+Explain step-by-step how to get the right answer using the enVision Math 2020 approach.
 Voice/style rules: ${voice}
 Use **bold** for key steps. Keep it under 120 words. Be encouraging — mistakes help us learn!`;
 
@@ -1211,9 +1524,10 @@ async function getHint() {
   const q = state.quizQuestions[state.quizCurrent];
   document.getElementById('tutorBox').classList.add('visible');
   document.getElementById('tutorText').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div>';
-  const prompt = `Give a short hint (1-2 sentences, NO answer) for this Grade ${state.user.grade} math question: "${q.question}". Standard: ${q.standard}. Be encouraging!`;
+  const hintVoice = gradeVoiceStr(state.user.grade);
+  const prompt = `Give a short hint (1-2 sentences, NO answer) for this Grade ${state.user.grade} math question: "${q.question}". Standard: ${q.standard}. Voice/style: ${hintVoice}. Be encouraging and age-appropriate!`;
   try {
-    const res = await callClaude(prompt, 'You are a helpful math tutor. Give hints, never spoil the answer.');
+    const res = await callClaude(prompt, `You are a helpful math tutor. Give hints, never spoil the answer. Match your language to Grade ${state.user.grade} level.`);
     document.getElementById('tutorText').innerHTML = '💡 <strong>Hint:</strong> ' + res;
   } catch(e) {
     document.getElementById('tutorText').innerHTML = 'Think carefully about the numbers involved!';
@@ -1299,8 +1613,8 @@ async function sendChat() {
 
   try {
     const gradeLabel = state.user.grade === 'K' ? 'Kindergarten' : `Grade ${state.user.grade}`;
-    const voice = gradeVoice(state.user.grade);
-    const sys = `You are MathMind, a warm and encouraging NYC math tutor for a ${gradeLabel} student named ${state.user.name}. You know the NYC Next Generation Learning Standards, i-Ready Math curriculum, and Eureka Math modules deeply.
+    const voice = gradeVoiceStr(state.user.grade);
+    const sys = `You are MathMind, a warm and encouraging NYC math tutor for a ${gradeLabel} student named ${state.user.name}. You know the NYC Next Generation Learning Standards, i-Ready Math curriculum, and enVision Math 2020 modules deeply.
 
 IMPORTANT — always match your language to this student's level: ${voice}
 
@@ -1424,7 +1738,7 @@ Respond ONLY with valid JSON (no markdown):
   "iReady": "<level description>",
   "met": ["NY-X.X.X"],
   "notMet": ["NY-X.X.X"],
-  "eureka": "<module/lesson connection>",
+  "envision": "<enVision Math 2020 topic/lesson connection>",
   "strengths": "<paragraph>",
   "errors": "<paragraph or 'None'>",
   "misconceptions": "<paragraph or 'None'>",
@@ -1472,7 +1786,7 @@ function showGraderResults(r, grade) {
   document.getElementById('gradeResultBody').innerHTML = `
     <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px">📋 Grading Report — Grade ${grade}</h3>
     ${metTags||notMetTags ? `<div style="margin-bottom:14px">${metTags?`<div style="margin-bottom:6px"><strong style="font-size:12px;color:var(--green)">✓ STANDARDS MET</strong><br>${metTags}</div>`:''}${notMetTags?`<div><strong style="font-size:12px;color:var(--red)">✗ NEEDS WORK</strong><br>${notMetTags}</div>`:''}</div>` : ''}
-    ${r.eureka ? `<div style="background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--purple)">📘 Eureka Math: ${r.eureka}</div>` : ''}
+    ${r.envision ? `<div style="background:rgba(253,185,125,.06);border:1px solid rgba(253,185,125,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--orange)">📘 enVision Math 2020: ${r.envision}</div>` : ''}
     <div style="margin-bottom:12px"><strong>✅ Strengths:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.strengths}</span></div>
     ${r.errors && r.errors!=='None' ? `<div style="margin-bottom:12px"><strong>⚠️ Errors:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.errors}</span></div>` : ''}
     ${r.misconceptions && r.misconceptions!=='None' ? `<div style="margin-bottom:12px"><strong>🧩 Misconceptions:</strong><br><span style="color:#c8d3e3;font-size:14px;line-height:1.7">${r.misconceptions}</span></div>` : ''}
@@ -1492,21 +1806,186 @@ function resetGrader() {
 // ═══════════════════════════════════════════
 // CLASSES
 // ═══════════════════════════════════════════
+function generateClassCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code.slice(0,3) + '-' + code.slice(3);
+}
+
 function buildClasses() {
-  const classes = [
-    { name:'Room 304 — Math', students:24, grade:4, avg:76 },
-    { name:'Room 304 — Remediation', students:8, grade:3, avg:62 },
-    { name:'After-School Math', students:15, grade:'3-4', avg:71 },
-  ];
-  document.getElementById('classCards').innerHTML = classes.map(c => `
-    <div class="card" style="cursor:pointer" onclick="showToast('Class details coming soon!')">
+  const view = document.getElementById('classCards');
+  if (!view) return;
+  const canAdd = !(state.license.plan === 'trial' && state.classes.length >= state.license.classesAllowed);
+  view.innerHTML = state.classes.map((c, idx) => `
+    <div class="card" style="cursor:pointer" onclick="openClassDetail(${idx})">
       <div class="lesson-icon">🏫</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:6px">${c.name}</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Grade ${c.grade} · ${c.students} students</div>
-      <div class="prog-track"><div class="prog-fill" style="width:${c.avg}%;background:${c.avg>=75?'var(--green)':'var(--warn)'}"></div></div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px">${c.name}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Grade ${c.grade} · ${c.students.length} students</div>
+      <div class="class-code-display" onclick="event.stopPropagation();copyClassCode('${c.code}')" title="Click to copy">${c.code}</div>
+      <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px">Click code to copy</div>
+      <div class="prog-track" style="margin-top:10px"><div class="prog-fill" style="width:${c.avg}%;background:${c.avg>=75?'var(--green)':'var(--warn)'}"></div></div>
       <div style="font-size:12px;color:var(--muted);margin-top:4px">Class avg: ${c.avg}%</div>
     </div>
-  `).join('');
+  `).join('') + `
+    <div class="card" style="display:flex;align-items:center;justify-content:center;cursor:${canAdd?'pointer':'not-allowed'};opacity:${canAdd?1:.6};min-height:180px;border:2px dashed var(--border)"
+      onclick="${canAdd ? 'openCreateClassModal()' : "showToast('Upgrade to add more classes. Free trial: 1 class only.')"}"
+      title="${canAdd ? 'Create a new class' : 'Upgrade your plan to add more classes'}">
+      <div style="text-align:center">
+        <div style="font-size:32px;margin-bottom:8px">➕</div>
+        <div style="font-weight:800;font-size:15px;color:${canAdd?'var(--sun)':'var(--muted)'}">New Class</div>
+        ${!canAdd ? `<div style="font-size:11px;color:var(--orange);margin-top:4px">Trial: 1 class max</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function copyClassCode(code) {
+  navigator.clipboard.writeText(code).then(() => showToast(`Class code ${code} copied!`)).catch(() => showToast('Code: ' + code));
+}
+
+function openCreateClassModal() {
+  const existing = document.getElementById('createClassModal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'createClassModal';
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <div class="modal-title">➕ Create New Class</div>
+      <div class="form-group">
+        <label>Class Name</label>
+        <input type="text" id="newClassName" placeholder="e.g. Room 204 Math" />
+      </div>
+      <div class="form-group">
+        <label>Grade Level</label>
+        <select id="newClassGrade">
+          <option>K</option><option>1</option><option>2</option><option>3</option>
+          <option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn btn-sun" style="flex:1;justify-content:center" onclick="createClass()">Create Class</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeCreateClassModal()">Cancel</button>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', e => { if (e.target === modal) closeCreateClassModal(); });
+  document.body.appendChild(modal);
+}
+
+function closeCreateClassModal() {
+  const m = document.getElementById('createClassModal');
+  if (m) m.remove();
+}
+
+function createClass() {
+  const name = document.getElementById('newClassName').value.trim();
+  const grade = document.getElementById('newClassGrade').value;
+  if (!name) { showToast('Please enter a class name'); return; }
+  const newClass = { name, grade, code: generateClassCode(), students: [], avg: 0 };
+  state.classes.push(newClass);
+  closeCreateClassModal();
+  buildClasses();
+  showToast(`Class "${name}" created! Code: ${newClass.code}`);
+}
+
+function openClassDetail(idx) {
+  const c = state.classes[idx];
+  if (!c) return;
+  const existing = document.getElementById('classDetailOverlay');
+  if (existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'classDetailOverlay';
+  overlay.className = 'class-detail-overlay';
+  const studentRows = c.students.length
+    ? c.students.map(s => `
+      <div class="student-row">
+        <div class="student-avatar" style="background:var(--sun)">${s.name[0]}</div>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${s.name}</div>
+          <div style="font-size:12px;color:var(--muted)">Grade ${s.grade}</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:${s.avg>=80?'var(--green)':s.avg>=60?'var(--warn)':'var(--red)'}">${s.avg}%</div>
+      </div>
+    `).join('')
+    : `<div style="text-align:center;padding:30px;color:var(--muted)">No students yet. Share the class code to get started.</div>`;
+
+  overlay.innerHTML = `
+    <button class="btn btn-ghost btn-sm" onclick="closeClassDetail()" style="margin-bottom:20px">← Back to Classes</button>
+    <div class="page-header">
+      <div class="page-title">🏫 ${c.name}</div>
+      <div class="page-sub">Grade ${c.grade} · ${c.students.length} students</div>
+    </div>
+    <div class="g2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">Class Code</div>
+        <div class="class-code-display" onclick="copyClassCode('${c.code}')">${c.code}</div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">Share this code with students to join</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Class Stats</div>
+        <div class="g2" style="gap:10px">
+          <div class="stat"><div class="stat-num" style="color:var(--sun)">${c.students.length}</div><div class="stat-lbl">Students</div></div>
+          <div class="stat"><div class="stat-num" style="color:${c.avg>=75?'var(--green)':'var(--warn)'}">${c.avg || '—'}%</div><div class="stat-lbl">Avg Score</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 Student Roster</div>
+      ${studentRows}
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function closeClassDetail() {
+  const o = document.getElementById('classDetailOverlay');
+  if (o) o.remove();
+}
+
+// ═══════════════════════════════════════════
+// LICENSE / UPGRADE
+// ═══════════════════════════════════════════
+function buildLicenseView() {
+  const lic = state.license;
+  const planLabels = { trial:'Free Trial', teacher:'Teacher', school:'School License' };
+  const card = document.getElementById('currentPlanCard');
+  if (!card) return;
+  card.innerHTML = `
+    <div class="card-title">📋 Your Current Plan</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:900;color:var(--sun)">${planLabels[lic.plan] || lic.plan}</div>
+        ${lic.plan === 'trial' ? `<div style="font-size:13px;color:var(--orange);margin-top:3px">⏳ ${lic.trialDaysLeft} days remaining</div>` : ''}
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="usage-meter" style="min-width:140px">
+          <div class="usage-meter-label"><span>Classes</span><span>${state.classes.length} / ${lic.classesAllowed === 999 ? '∞' : lic.classesAllowed}</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:${Math.min((state.classes.length/lic.classesAllowed)*100,100)}%;background:var(--orange)"></div></div>
+        </div>
+        <div class="usage-meter" style="min-width:140px">
+          <div class="usage-meter-label"><span>Grader Uses</span><span>${lic.graderUsed} / ${lic.graderLimit === 999 ? '∞' : lic.graderLimit}</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:${Math.min((lic.graderUsed/lic.graderLimit)*100,100)}%;background:var(--purple)"></div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function openSchoolInquiryModal() {
+  document.getElementById('schoolInquiryModal').style.display = 'flex';
+}
+function closeSchoolInquiryModal() {
+  document.getElementById('schoolInquiryModal').style.display = 'none';
+}
+function submitSchoolInquiry() {
+  const name = document.getElementById('siName').value.trim();
+  const school = document.getElementById('siSchool').value.trim();
+  const email = document.getElementById('siEmail').value.trim();
+  if (!name || !school || !email) { showToast('Please fill in all fields'); return; }
+  closeSchoolInquiryModal();
+  showToast(`Thanks ${name}! We'll contact you at ${email} within 1 business day.`);
 }
 
 // ═══════════════════════════════════════════
@@ -1558,6 +2037,15 @@ function toggleSidebar() {
 
 // Init with default login shown
 document.getElementById('loginGrade').value = '4';
+
+// ── SERVICE WORKER REGISTRATION ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('[SW] Registered:', reg.scope))
+      .catch(err => console.warn('[SW] Registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>
